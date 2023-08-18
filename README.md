@@ -133,11 +133,11 @@ Recuerda que al abrir puertos, estás exponiendo servicios a Internet, lo que pu
 **2-Seleccionar el Nodo Mosquitto:** En la lista de nodos disponibles, busca y haz doble clic en el nodo llamado "pmb_tesla_bot" para abrir su ventana de configuración.
 
 **3-Conexión a la Base de Datos:** En la pestaña "Connection", ingresa los detalles de conexión a tu base de datos PostgreSQL:
-
-    Host: La dirección IP o el nombre de host donde se encuentra la base de datos.
-    Port: El número de puerto de la base de datos (por defecto es 5432).
-    Database: El nombre que le hemos puesto a la base de datos en el `docker-compose.yml`.
-    SSL: Dejamos la opción "false".
+   
+   Host: La dirección IP o el nombre de host donde se encuentra la base de datos.
+   Port: El número de puerto de la base de datos (por defecto es 5432).
+   Database: El nombre que le hemos puesto a la base de datos en el `docker-compose.yml`.
+   SSL: Dejamos la opción "false".
 
 **4-Usuario y contraseña:** En la pestaña seguridad introducimos el usuario y contraseña que hemos definido en el `docker-compose.yml` para nuestra base de datos.
 
