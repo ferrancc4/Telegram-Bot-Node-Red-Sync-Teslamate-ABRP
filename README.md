@@ -148,10 +148,10 @@ Recuerda que al abrir puertos, estás exponiendo servicios a Internet, lo que pu
 
 **3-Conexión a la Base de Datos:** En la pestaña "Connection", ingresa los detalles de conexión a tu base de datos PostgreSQL:
 
-    Host: La dirección IP o el nombre de host donde se encuentra la base de datos.
-    Port: El número de puerto de la base de datos (por defecto es 5432).
-    Database: El nombre que le hemos puesto a la base de datos en el `docker-compose.yml`.
-    SSL: Dejamos la opción "false".
+   Host: La dirección IP o el nombre de host donde se encuentra la base de datos.
+   Port: El número de puerto de la base de datos (por defecto es 5432).
+   Database: El nombre que le hemos puesto a la base de datos en el `docker-compose.yml`.
+   SSL: Dejamos la opción "false".
 
 ![postgre_connection](screenshots/postgtre_connection.png)
 
@@ -172,9 +172,10 @@ Recuerda que al abrir puertos, estás exponiendo servicios a Internet, lo que pu
 ![variables](screenshots/variables.png)
 
 **5-Actualizar Valores de las Variables:** En la ventana de texto que se abre, modifica los valores de las siguientes variables:
-     - `telegram_chatId`: Reemplaza con el chatID que obtuviste de Telegram.
-     - `abrp_user_token`: Reemplaza con tu token de usuario de ABRP.
-     - `abrp_car_model`: Reemplaza con el modelo de automóvil que configuraste en ABRP.
+
+   - `telegram_chatId`: Reemplaza con el chatID que obtuviste de Telegram.
+   - `abrp_user_token`: Reemplaza con tu token de usuario de ABRP.
+   - `abrp_car_model`: Reemplaza con el modelo de automóvil que configuraste en ABRP.
 
 **6-Guardar los Cambios:** Una vez que hayas actualizado los valores de las variables, asegúrate de guardar los cambios en la función "variables".
 
@@ -203,7 +204,7 @@ Este flow utiliza la apy de Geoapify para obtener las direcciones de las calles 
 
 **7-Actualizar Valores de las Variables:** En la ventana de texto que se abre, modifica los valores de las siguientes variables:
 
-    - `geoAPY`: Reemplaza con api key generada anteriormente.
+   - `geoAPY`: Reemplaza con api key generada anteriormente.
 
 **8-Guardar los Cambios:** Una vez que hayas actualizado los valores de las variables, asegúrate de guardar los cambios en la función "variables".
 
