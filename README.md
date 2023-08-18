@@ -23,9 +23,9 @@ node-red-contrib-postgresql
 ```
 También es necesario tener la base de datos de Teslamate abierta.
 
-### Instalación de los modulos requeridos
+### Instalación de los módulos requeridos
 
-Seguir los siguientes pasos para instalar los diferentes modulos necesarios.
+Seguir los siguientes pasos para instalar los diferentes módulos necesarios.
 
 **1-Abrir Node-Red:** Inicia Node-Red accediendo a su interfaz web a través de un navegador. Por lo general, puedes acceder a Node-Red en http://localhost:1880.
 
@@ -92,13 +92,13 @@ node-red-contrib-postgresql
 
 **4-Guardar los Cambios:** Una vez que hayas ingresado el token, asegúrate de hacer clic en el botón "Update" para guardar los cambios realizados en la configuración del nodo.
 
-### Configurar nodo Postgres
+### Configurar nodo Postgresql
 
-Para poder utilizar este nodo primero tienes que tener acceso a la base de datos de Teslamate. Si ya tienes abiertos los puertos de la base de datos puedes pasar directamente al paso de configuracion del nodo Postgres.
+Para poder utilizar este nodo primero tienes que tener acceso a la base de datos de Teslamate. Si ya tienes abiertos los puertos de la base de datos, puedes pasar directamente al paso de configuración del nodo Postgresql.
 
 #### Abrir puertos para acceder a la base de datos de Teslamate
 
-Si tienes TeslaMate instalado en Docker Compose y deseas abrir puertos para conectarte a la base de datos PostgreSQL, aquí tienes los pasos que debes seguir:
+Si tienes Teslamate instalado en Docker Compose y deseas abrir puertos para conectarte a la base de datos PostgreSQL, aquí tienes los pasos que debes seguir:
 
 **1-Edición de tu `docker-compose.yml`:**
    Abre el archivo `docker-compose.yml` en un editor de texto. En este archivo, deberías tener una sección que define el servicio de PostgreSQL. Asegúrate de que la configuración del servicio tenga la opción `ports` para mapear los puertos desde el contenedor al host.
@@ -110,9 +110,9 @@ Si tienes TeslaMate instalado en Docker Compose y deseas abrir puertos para cone
      database:
        image: postgres:latest
        environment:
-         POSTGRES_USER: teslamate
+         POSTGRES_USER: Teslamate
          POSTGRES_PASSWORD: mysecretpassword
-         POSTGRES_DB: teslamate
+         POSTGRES_DB: Teslamate
    ```
 
    Puedes agregar una línea para mapear el puerto 5432 del contenedor al puerto deseado en el host:
@@ -122,9 +122,9 @@ Si tienes TeslaMate instalado en Docker Compose y deseas abrir puertos para cone
      database:
        image: postgres:latest
        environment:
-         POSTGRES_USER: teslamate
+         POSTGRES_USER: Teslamate
          POSTGRES_PASSWORD: mysecretpassword
-         POSTGRES_DB: teslamate
+         POSTGRES_DB: Teslamate
        ports:
          - 5432:5432
    ```
@@ -140,7 +140,7 @@ Si tienes TeslaMate instalado en Docker Compose y deseas abrir puertos para cone
 
 Recuerda que al abrir puertos, estás exponiendo servicios a Internet, lo que puede tener implicaciones de seguridad. Asegúrate de implementar medidas de seguridad adecuadas, como cortafuegos y autenticación sólida, para proteger tus servicios y datos.
 
-#### Configuración nodo Postgres
+#### Configuración nodo Postgresql
 
 **1-Acceder al Editor de Nodos:** En la esquina superior derecha de la pantalla de Node-Red, haz clic en el icono con forma de rueda dentada para acceder a la configuración de nodos.
 
@@ -181,7 +181,7 @@ Recuerda que al abrir puertos, estás exponiendo servicios a Internet, lo que pu
 
 ### Configuración Geoapify
 
-Este flow utiliza la apy de Geoapify para obtener las direcciones de las calles a partir de las coordenadas de longitud y latitud obtenidas de la base de datos de teslamate. Para obtener la api key debes seguir los siguientes pasos:
+Este flow utiliza la apy de Geoapify para obtener las direcciones de las calles a partir de las coordenadas de longitud y latitud obtenidas de la base de datos de Teslamate. Para obtener la api key debes seguir los siguientes pasos:
 
 **1-Accede al Sitio Web de Geoapify:** Abre tu navegador web y visita el sitio web de [Geoapify](https://www.geoapify.com).
 
@@ -197,6 +197,8 @@ Este flow utiliza la apy de Geoapify para obtener las direcciones de las calles 
    - Después de crear el proyecto, en el panel de control, busca la sección donde se generan las API Keys. Puede llamarse "API Keys" o similar.
    - Aquí podrás ver una lista de tus API Keys existentes o crear una nueva.
    - Una vez creada, se te proporcionará tu API Key. Asegúrate de copiarla y guardarla en un lugar seguro, ya que será necesaria para autenticarte en las solicitudes a Geoapify.
+
+   ![geoapi](screenshots/geoapi.png)
 
 **5-Abrir el flow en Node-Red:** Accede al flow en Node-Red donde en el apartado MQTT to Telegram.
 
@@ -216,7 +218,7 @@ Después de hacer todos los cambios, asegúrate de hacer clic en el botón "Depl
 
 ## A tener en cuenta
 
-Quiero aclarar que los enlaces a los gráficos de Grafana que encontrarás en el bot no son los gráficos predeterminados de TeslaMate. Estos enlaces están dirigidos a gráficos personalizados creados por [Carlos Cuezva - dashboards-Grafana-Teslamate](https://github.com/CarlosCuezva/dashboards-Grafana-Teslamate).
+Quiero aclarar que los enlaces a los gráficos de Grafana que encontrarás en el bot no son los gráficos predeterminados de Teslamate. Estos enlaces están dirigidos a gráficos personalizados creados por [Carlos Cuezva - dashboards-Grafana-Teslamate](https://github.com/CarlosCuezva/dashboards-Grafana-Teslamate).
 
 ## Créditos
 
