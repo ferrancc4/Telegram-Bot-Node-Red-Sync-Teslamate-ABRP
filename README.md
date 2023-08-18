@@ -5,7 +5,7 @@
 ![GitHub](https://img.shields.io/github/license/ferrancc4/Telegram-bot-Node-Red-Sync-Teslamate-ABRP)
 [![](https://img.shields.io/badge/Donate-PayPal-ff69b4.svg)](https://www.paypal.me/Ferrancc12)
 
-![Resumen general](screenshots/capture_1.jpeg)
+![Resumen general](screenshots/resumgeneral.png)
 
 
 ## Requisitos para la Instalación y correcto funcionamiento
@@ -31,6 +31,8 @@ Seguir los siguientes pasos para instalar los diferentes modulos necesarios.
 
 **2-Ingresar al Administrador de Paquetes:** Una vez que estés en la interfaz de Node-Red, haz clic en el icono de menú en la esquina superior derecha y selecciona "Manage palette". Esto te llevará al administrador de paquetes.
 
+![Manage palette](screenshots/manage_palette.png)
+
 **3-Instalar un nuevo módulo:** En el administrador de paquetes, dirígete a la pestaña "Install". Aquí puedes buscar el módulo que deseas instalar. Puedes buscar por nombre o descripción del módulo.
 
 ```bash 
@@ -43,6 +45,8 @@ node-red-node-smooth
 node-red-contrib-postgresql
 ```
 
+![search node](screenshots/serach_node.png)
+
 **4-Seleccionar y Instalar:** Cuando encuentres el módulo que deseas instalar, haz clic en el botón "Install" junto a él. Node-Red descargará e instalará automáticamente el módulo desde el repositorio.
 
 **5-Reiniciar Node-Red:** Una vez que se haya completado la instalación, es recomendable reiniciar Node-Red para asegurarte de que el nuevo módulo esté cargado correctamente. Puedes hacerlo desde el mismo administrador de paquetes o reiniciando el servicio de Node-Red.
@@ -51,11 +55,15 @@ node-red-contrib-postgresql
 
 **1-Acceder al Editor:** Una vez que estés en la interfaz de Node-Red, verás el entorno de desarrollo visual. Haz clic en el icono de menú en la esquina superior derecha y a continuación, selecciona "Import" en el menú desplegable.
 
+![Import](screenshots/import.png)
+
 **2-Cargar el flow:** En la sección de importación, encontrarás varias opciones para cargar un flow. Puedes pegar el JSON del flow que deseas importar en el campo de texto, o puedes cargar un archivo JSON que contenga el flow.
 
 **3-Seleccionar el flow:** Si estás importando desde un archivo, haz clic en el botón "select a file to import" para seleccionar el archivo JSON que contiene el flow que deseas importar. Si estás pegando el JSON directamente, simplemente pégalo en el campo de texto.
 
 **4-Importar el flow:** Después de pegar el JSON o cargar el archivo, haz clic en el botón "Import" para comenzar el proceso de importación.
+
+![import flow](screenshots/import_flow.png)
 
 
 ### Configurar nodo de MQTT
@@ -66,15 +74,21 @@ node-red-contrib-postgresql
 
 **3-Ajustar la Configuración:** En la ventana de configuración del nodo Mosquitto, ajusta los valores de "Server" y "Port" según la dirección IP o el nombre de host de tu servidor MQTT y el puerto MQTT que estés utilizando. Por defecto, el puerto es el 1883.
 
+![mqtt](screenshots/mqtt_conf.png)
+
 **4-Guardar los Cambios:** Una vez que hayas ajustado la configuración del nodo Mosquitto, asegúrate de hacer clic en el botón "Update" para guardar los cambios que has realizado.
 
 ### Configurar nodo de Telegram
 
 **1-Acceder al Editor de Nodos:** En la esquina superior derecha de la pantalla de Node-Red, haz clic en el icono con forma de rueda dentada para acceder a la configuración de nodos.
 
-**2-Seleccionar el Nodo Mosquitto:** En la lista de nodos disponibles, busca y haz doble clic en el nodo llamado "pmb_tesla_bot" para abrir su ventana de configuración.
+**2-Seleccionar el Nodo pmb_tesla_bot:** En la lista de nodos disponibles, busca y haz doble clic en el nodo llamado "pmb_tesla_bot" para abrir su ventana de configuración.
+
+![lista](screenshots/nodes_config.png)
 
 **3-Ajustar el Token de Telegram:** En la ventana de configuración del nodo pmb_tesla_bot, busca el campo llamado Token y ajústalo con el token de acceso que hayas obtenido al crear un bot en Telegram a través del BotFather.
+
+![telegram_conf](screenshots/telegram_conf.png)
 
 **4-Guardar los Cambios:** Una vez que hayas ingresado el token, asegúrate de hacer clic en el botón "Update" para guardar los cambios realizados en la configuración del nodo.
 
@@ -133,13 +147,17 @@ Recuerda que al abrir puertos, estás exponiendo servicios a Internet, lo que pu
 **2-Seleccionar el Nodo Mosquitto:** En la lista de nodos disponibles, busca y haz doble clic en el nodo llamado "pmb_tesla_bot" para abrir su ventana de configuración.
 
 **3-Conexión a la Base de Datos:** En la pestaña "Connection", ingresa los detalles de conexión a tu base de datos PostgreSQL:
-   
-   Host: La dirección IP o el nombre de host donde se encuentra la base de datos.
-   Port: El número de puerto de la base de datos (por defecto es 5432).
-   Database: El nombre que le hemos puesto a la base de datos en el `docker-compose.yml`.
-   SSL: Dejamos la opción "false".
+
+    Host: La dirección IP o el nombre de host donde se encuentra la base de datos.
+    Port: El número de puerto de la base de datos (por defecto es 5432).
+    Database: El nombre que le hemos puesto a la base de datos en el `docker-compose.yml`.
+    SSL: Dejamos la opción "false".
+
+![postgre_connection](screenshots/postgtre_connection.png)
 
 **4-Usuario y contraseña:** En la pestaña seguridad introducimos el usuario y contraseña que hemos definido en el `docker-compose.yml` para nuestra base de datos.
+
+![postgre_security](screenshots/postrgre_security.png)
 
 ### Configurar ABRP y Telegram
 
@@ -150,6 +168,8 @@ Recuerda que al abrir puertos, estás exponiendo servicios a Internet, lo que pu
 **3-Abrir el flow en Node-Red:** Accede al flow en Node-Red donde en el apartado MQTT to Telegram.
 
 **4-Encontrar y Modificar la Función Variables:** Busca el nodo de función llamado "variables" dentro del flow. Haz doble clic en el nodo "variables" para abrir su ventana de edición.
+
+![variables](screenshots/variables.png)
 
 **5-Actualizar Valores de las Variables:** En la ventana de texto que se abre, modifica los valores de las siguientes variables:
      - `telegram_chatId`: Reemplaza con el chatID que obtuviste de Telegram.
@@ -167,10 +187,12 @@ Este flow utiliza la apy de Geoapify para obtener las direcciones de las calles 
 **2-Crea una Cuenta o Inicia Sesión:** Si aún no tienes una cuenta en Geoapify, regístrate creando una cuenta nueva. Si ya tienes una cuenta, inicia sesión con tus credenciales.
 
 **3-Crea un Proyecto:**
+
    - En el panel de control, busca la sección para crear un nuevo proyecto. Por lo general, suele haber un botón o enlace llamado "Create New Project" o similar.
    - Proporciona un nombre descriptivo para tu proyecto y cualquier otra información requerida.
 
 **4-Obtén tu API Key:**
+
    - Después de crear el proyecto, en el panel de control, busca la sección donde se generan las API Keys. Puede llamarse "API Keys" o similar.
    - Aquí podrás ver una lista de tus API Keys existentes o crear una nueva.
    - Una vez creada, se te proporcionará tu API Key. Asegúrate de copiarla y guardarla en un lugar seguro, ya que será necesaria para autenticarte en las solicitudes a Geoapify.
@@ -180,6 +202,7 @@ Este flow utiliza la apy de Geoapify para obtener las direcciones de las calles 
 **6-Encontrar y Modificar la Función Variables:** Busca el nodo de función llamado "variables" dentro del flow. Haz doble clic en el nodo "variables" para abrir su ventana de edición.
 
 **7-Actualizar Valores de las Variables:** En la ventana de texto que se abre, modifica los valores de las siguientes variables:
+
     - `geoAPY`: Reemplaza con api key generada anteriormente.
 
 **8-Guardar los Cambios:** Una vez que hayas actualizado los valores de las variables, asegúrate de guardar los cambios en la función "variables".
@@ -187,6 +210,8 @@ Este flow utiliza la apy de Geoapify para obtener las direcciones de las calles 
 ### Desplegar el flow
 
 Después de hacer todos los cambios, asegúrate de hacer clic en el botón "Deploy" en la esquina superior derecha para guardar y activar los cambios en tu entorno de Node-Red.
+
+![deploy](screenshots/deploy.png)
 
 ## A tener en cuenta
 
