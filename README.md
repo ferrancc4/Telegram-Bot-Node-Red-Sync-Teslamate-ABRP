@@ -5,7 +5,7 @@
 ![GitHub](https://img.shields.io/github/license/ferrancc4/Telegram-bot-Node-Red-Sync-Teslamate-ABRP)
 [![](https://img.shields.io/badge/Donate-PayPal-ff69b4.svg)](https://www.paypal.me/Ferrancc12)
 
-![Resumen general](screenshots/resumgeneral.png)
+![Resumen general](screenshots/resumgeneral.png)![Resumen viaje](screenshots/resumviatge.png)
 
 
 ## Requisitos para la Instalación y correcto funcionamiento
