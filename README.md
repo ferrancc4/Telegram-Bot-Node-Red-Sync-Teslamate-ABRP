@@ -88,7 +88,7 @@ node-red-contrib-postgresql
 
 **3-Ajustar el Token de Telegram:** En la ventana de configuración del nodo pmb_tesla_bot, busca el campo llamado Token y ajústalo con el token de acceso que hayas obtenido al crear un bot en Telegram a través del BotFather.
 
-![telegram_conf](screenshots/telegram_conf.png)
+![telegram_conf](screenshots/Telegram_conf.png)
 
 **4-Guardar los Cambios:** Una vez que hayas ingresado el token, asegúrate de hacer clic en el botón "Update" para guardar los cambios realizados en la configuración del nodo.
 
