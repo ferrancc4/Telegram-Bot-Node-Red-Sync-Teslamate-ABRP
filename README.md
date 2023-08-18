@@ -153,7 +153,7 @@ Recuerda que al abrir puertos, estás exponiendo servicios a Internet, lo que pu
    Database: El nombre que le hemos puesto a la base de datos en el `docker-compose.yml`.
    SSL: Dejamos la opción "false".
 
-![postgre_connection](screenshots/postgtre_connection.png)
+![postgre_connection](screenshots/postgre_connection.png)
 
 **4-Usuario y contraseña:** En la pestaña seguridad introducimos el usuario y contraseña que hemos definido en el `docker-compose.yml` para nuestra base de datos.
 
