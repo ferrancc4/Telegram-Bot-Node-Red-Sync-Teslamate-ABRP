@@ -165,7 +165,7 @@ Recuerda que al abrir puertos, estás exponiendo servicios a Internet, lo que pu
 
 **2-Obtener el ChatID de Telegram:** Para obtener el chatID de Telegram, hay diferentes metodos que puedes encontrar en internet.
 
-**3-Abrir el flow en Node-Red:** Accede al flow en Node-Red donde en el apartado MQTT to Telegram.
+**3-Abrir el flow en Node-Red:** Accede al flow en Node-Red en el apartado MQTT to Telegram.
 
 **4-Encontrar y Modificar la Función Variables:** Busca el nodo de función llamado "variables" dentro del flow. Haz doble clic en el nodo "variables" para abrir su ventana de edición.
 
@@ -200,7 +200,7 @@ Este flow utiliza la apy de Geoapify para obtener las direcciones de las calles 
 
    ![geoapi](screenshots/geoapi.png)
 
-**5-Abrir el flow en Node-Red:** Accede al flow en Node-Red donde en el apartado MQTT to Telegram.
+**5-Abrir el flow en Node-Red:** Accede al flow en Node-Red en el apartado MQTT to Telegram.
 
 **6-Encontrar y Modificar la Función Variables:** Busca el nodo de función llamado "variables" dentro del flow. Haz doble clic en el nodo "variables" para abrir su ventana de edición.
 
@@ -209,6 +209,14 @@ Este flow utiliza la apy de Geoapify para obtener las direcciones de las calles 
    - `geoAPY`: Reemplaza con api key generada anteriormente.
 
 **8-Guardar los Cambios:** Una vez que hayas actualizado los valores de las variables, asegúrate de guardar los cambios en la función "variables".
+
+## Configurar mensajes automàticos
+
+Este nodo también se encarga de configurar y controlar las variables que determinan cuándo se envían mensajes automáticos en el bot de Telegram.
+
+![variablesmens](screenshots/variablesmens.png)
+
+En resumen, este código en el nodo "variables" establece diversas variables que controlan diferentes aspectos de los mensajes automáticos en el bot de Telegram, como los mensajes de resumen del viaje, los mensajes de resumen de la carga, los mensajes cuando el coche se duerme, y la distancia mínima para guardar trayectos en la lista de los últimos seis viajes. Estas variables son configurables y permiten ajustar el comportamiento de los mensajes automáticos según tus preferencias.
 
 ### Desplegar el flow
 
