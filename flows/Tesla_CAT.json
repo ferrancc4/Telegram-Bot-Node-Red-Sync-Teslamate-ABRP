@@ -1,15 +1,15 @@
 [
     {
-        "id": "53c16985a9ab28c1",
+        "id": "1073cb1121328c0b",
         "type": "tab",
         "label": "Tesla CAT",
         "disabled": false,
         "info": ""
     },
     {
-        "id": "63e89f01a9d0a5f7",
+        "id": "a743916634367658",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "geofence",
         "func": "let previous_fence = flow.get('geofence');\nlet new_fence = msg.payload;\n//flow.set('geofence',new_fence);\nmsg.topic = '';\n\nif(previous_fence !== new_fence){\n    if(previous_fence !== \"\"){\n        msg.topic = `surt de la zona <b>${previous_fence}</b>`;\n    }\n    if(new_fence !== \"\"){\n        if(previous_fence !== \"\"){\n            msg.topic += ' y ';\n        }\n        msg.topic += `entra a la zona <b>${new_fence}</b>`;\n    }\n} else return null;\nreturn msg;\n",
         "outputs": 1,
@@ -21,14 +21,14 @@
         "y": 120,
         "wires": [
             [
-                "b589e4a07a793dfe"
+                "4d672796471aeaf2"
             ]
         ]
     },
     {
-        "id": "b589e4a07a793dfe",
+        "id": "4d672796471aeaf2",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Format message",
         "func": "let display_name = flow.get('display_name');\n\nmsg.payload = {\n    chatId: flow.get('telegram_chatId'),\n    type: 'message',\n    content: `<b>${display_name}</b> ${msg.topic}`\n}\nmsg.payload.options = {\n    parse_mode : \"HTML\", \n    disable_web_page_preview: true\n};\n\nreturn msg;",
         "outputs": 1,
@@ -40,16 +40,16 @@
         "y": 140,
         "wires": [
             [
-                "ccec2afe8a7a0147"
+                "ff0c62eaa1d15160"
             ]
         ]
     },
     {
-        "id": "ccec2afe8a7a0147",
+        "id": "ff0c62eaa1d15160",
         "type": "telegram sender",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Status messages",
-        "bot": "13c2734f57e9b03e",
+        "bot": "459d96c62d8d6e7e",
         "haserroroutput": false,
         "outputs": 1,
         "x": 1050,
@@ -59,9 +59,9 @@
         ]
     },
     {
-        "id": "ab7665f65b2617e4",
+        "id": "e571fd9102e849b4",
         "type": "switch",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "property": "topic",
         "propertyType": "msg",
@@ -119,42 +119,42 @@
         "y": 380,
         "wires": [
             [
-                "401849d543c1e2c1",
-                "a622eb55ea1ec50a",
-                "8005a6e7156dbac6",
-                "30afbb0f95259f0e",
-                "9a827af65c11afda",
-                "10204c2cfc38a340",
-                "b1f04a7ddc3c27a5",
-                "426c0f1b5377b6de",
-                "2f5d7807a327af8e",
-                "574022d592e40ccd"
+                "aaf9072cd7806e8d",
+                "cc2b6b835d2c23c6",
+                "f04031b25551e6dd",
+                "6608b3f40a7cc00c",
+                "48660f4f28ee34e1",
+                "40e44b9916d8172c",
+                "f26d6240c150c236",
+                "887aa94523f551d0",
+                "256bab6b1a88bfb9",
+                "87860e312bb654fd"
             ],
             [],
             [],
             [
-                "d98765bf05926460"
+                "a75b26d60fbf3304"
             ],
             [
-                "03136f3eefe5e75b"
+                "f288aa8d393a412d"
             ],
             [
-                "c71c699748f9f661"
+                "b51f2b4b8481c8ed"
             ],
             [
-                "df0f720ab0503a51"
+                "466d2d64cf428679"
             ],
             [
-                "6689debbd72fed7e",
-                "574022d592e40ccd"
+                "70d95ba58ebef14c",
+                "87860e312bb654fd"
             ],
             []
         ]
     },
     {
-        "id": "62adee9f9e4d5d46",
+        "id": "867d676d1c50f835",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "time to full charge",
         "func": "//node.warn(msg.topic + \": \" + msg.payload);\n\nlet previous = flow.get('time_to_full_charge');\nif(flow.get('state') !== 'charging' || \n    previous.timeleft === msg.payload){\n        //node.warn('returned from 1 ' + flow.get('state'))\n        return;\n}\n\nlet now = Math.round(Date.now()/1000);\nlet current = { timestamp: now, timeleft: msg.payload};\nlet remaining = msg.payload.split('.');\nlet minutes = Math.ceil(60 * Number(\".\" + remaining[1]));\n\n// If more than 1 hour remaining, print max 1 time per 15 minutes\nif(remaining[0] > 0 && (now - previous.timestamp)/60 <= 15)\n    return;\n// If less than 1 hour remaining, print max 1 time per 5 minutes\nif(remaining[0] == 0 && (now - previous.timestamp)/60 < 5)\n    return;\n    \nlet how_long = \"\";\nif(remaining[0] > 0){\n    how_long = `${remaining[0]} hores ${minutes} minuts`\n} else {\n    how_long = `${minutes} minuts`\n}\nflow.set('time_to_full_charge',current);\nmsg.topic = `estarà carregat en <b>${how_long}</b>`;\n\nreturn msg;",
         "outputs": 1,
@@ -166,14 +166,14 @@
         "y": 180,
         "wires": [
             [
-                "b589e4a07a793dfe"
+                "4d672796471aeaf2"
             ]
         ]
     },
     {
-        "id": "d98765bf05926460",
+        "id": "a75b26d60fbf3304",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "update",
         "func": "let payload = msg.payload;\nlet current_version = flow.get('software_current_version');\nlet new_version = flow.get('software_new_version');\n\n//node.warn(msg.topic + \": \" + msg.payload);\n\nif (payload !== \"\" && payload !== current_version && payload !== new_version) {\n    msg.topic = `🎁 té una actualització disponible: <a href=\"https://www.notateslaapp.com/software-updates/version/${payload}/release-notes\"><i>${payload}</i></a>`;\n    //flow.set('software_new_version', payload);\n} else {\n    return;\n}\n\nreturn msg;",
         "outputs": 1,
@@ -185,27 +185,27 @@
         "y": 240,
         "wires": [
             [
-                "b589e4a07a793dfe"
+                "4d672796471aeaf2"
             ]
         ]
     },
     {
-        "id": "a33d94f33f79694f",
+        "id": "94c4727fcd950a17",
         "type": "link out",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "change-state",
         "mode": "link",
         "links": [
-            "e4d4cff5c81bbc57"
+            "80fe506b88606239"
         ],
         "x": 635,
         "y": 60,
         "wires": []
     },
     {
-        "id": "f78061b445e66c5e",
+        "id": "a2d226c73707dba9",
         "type": "delay",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "pauseType": "delay",
         "timeout": "5",
@@ -223,14 +223,14 @@
         "y": 180,
         "wires": [
             [
-                "b513b03057259c13"
+                "dbb5b36d932089b2"
             ]
         ]
     },
     {
-        "id": "94c63a817f9d634a",
+        "id": "a06ca46b6a77300e",
         "type": "switch",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "property": "payload",
         "propertyType": "msg",
@@ -266,26 +266,26 @@
         "y": 420,
         "wires": [
             [
-                "9a5eee6a44b2696f"
+                "07cd76ea63ec7791"
             ],
             [
-                "c0ed29937ee3e90d"
+                "8316fbb624219073"
             ],
             [
-                "88f2c76611bf8862"
+                "7e123dc4cdf57e38"
             ],
             [
-                "88f2c76611bf8862"
+                "7e123dc4cdf57e38"
             ],
             [
-                "4b835269d68806ed"
+                "0313508c4519f2f9"
             ]
         ]
     },
     {
-        "id": "c0ed29937ee3e90d",
+        "id": "8316fbb624219073",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "set parameters",
         "func": "const USER_TOKEN = flow.get('abrp_user_token');\nconst CAR_MODEL = flow.get('abrp_car_model');\nconst API_KEY = flow.get('abrp_api_key');\n\nlet data = {\n    utc: Math.floor(Date.now() / 1000),\n    soc: flow.get('usable_battery_level') || 0,\n    power: flow.get('power') || 0,\n    speed: flow.get('speed') || 0,\n    lat: flow.get('latitude') || 0,\n    lon: flow.get('longitude') || 0,\n    is_charging: false,\n    is_dcfc: false,\n    is_parked: false,\n    heading: flow.get('heading') || 0,\n    elevation: flow.get('elevation') || 0,\n    ext_temp: flow.get('outside_temp') || 0,\n    voltage: flow.get('charger_voltage') || 0,\n    current: flow.get('charger_actual_current') || 0,\n    odometer: flow.get('odometer') || 0,\n    est_battery_range: flow.get('rated_battery_range_km') || 0,\n    kwh_charged: flow.get('charge_energy_added') || 0,\n    car_model: CAR_MODEL\n};\nlet state = flow.get('state');\n\nswitch(state) {\n    case 'driving':\n        data.is_parked = false\n        data.is_charging = false\n        data.is_dcfc = false\n        break;\n    case 'charging':\n        data.is_parked = true\n        data.is_charging = true\n        data.is_dcfc = true\n        break;\n    default:\n        data.is_parked = true\n        data.is_charging = false\n        data.is_dcfc = false\n}\n\nif (parseInt(flow.get('charger_power') > 0)){\n    data.is_charging = true\n}\n\nswitch (flow.get('shift_state')) {\n    case 'P':\n    case 'N':\n        data.is_parked = true\n        break;\n    case 'D':\n    case 'R':\n        data.is_parked = false\n        break;\n}\n\nif (state !== \"charging\"){\n    delete data.kwh_charged;\n    delete data.voltage;\n}\n\nmsg.headers={ \n    'Content-Type': 'application/json',\n    'Authorization': 'APIKEY ' + API_KEY\n};\n//msg.payload = {};\nmsg.payload = {tlm: data};\nmsg.userToken = USER_TOKEN;\n\nreturn msg;",
         "outputs": 1,
@@ -297,14 +297,14 @@
         "y": 440,
         "wires": [
             [
-                "e191ae7c8d9b1eab"
+                "7ae39c0594556d3a"
             ]
         ]
     },
     {
-        "id": "e191ae7c8d9b1eab",
+        "id": "7ae39c0594556d3a",
         "type": "http request",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "method": "POST",
         "ret": "obj",
@@ -321,14 +321,14 @@
         "y": 420,
         "wires": [
             [
-                "cd174c5fbc99a501"
+                "e86f5c0ac9645f67"
             ]
         ]
     },
     {
-        "id": "b513b03057259c13",
+        "id": "dbb5b36d932089b2",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "get car state",
         "func": "let previous_state = flow.get('previous_state');\nlet current_state = flow.get('state');\n\n//node.warn(previous_state + \" : \" + current_state);\n\nif (previous_state !== current_state){\n    flow.set('previous_state', current_state);\n    flow.set('i', 300);\n}\n\nmsg.payload = current_state;\n\nreturn msg;",
         "outputs": 1,
@@ -340,31 +340,31 @@
         "y": 180,
         "wires": [
             [
-                "94c63a817f9d634a"
+                "a06ca46b6a77300e"
             ]
         ]
     },
     {
-        "id": "e4d4cff5c81bbc57",
+        "id": "80fe506b88606239",
         "type": "link in",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "abrp",
         "links": [
-            "a33d94f33f79694f",
+            "94c4727fcd950a17",
             "bb89821881876683"
         ],
         "x": 1885,
         "y": 120,
         "wires": [
             [
-                "b513b03057259c13"
+                "dbb5b36d932089b2"
             ]
         ]
     },
     {
-        "id": "4b835269d68806ed",
+        "id": "0313508c4519f2f9",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "set counter",
         "func": "let i=parseInt(flow.get('i'));\ni +=1;\n\nif (i > 300){\n    i = 0;\n}\n\nflow.set('i',i);\nreturn msg;",
         "outputs": 1,
@@ -376,14 +376,14 @@
         "y": 180,
         "wires": [
             [
-                "f78061b445e66c5e"
+                "a2d226c73707dba9"
             ]
         ]
     },
     {
-        "id": "15efe980708b8c6a",
+        "id": "ebaab1f475ccc77b",
         "type": "inject",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Start ABRP",
         "props": [
             {
@@ -401,14 +401,14 @@
         "y": 180,
         "wires": [
             [
-                "4b835269d68806ed"
+                "0313508c4519f2f9"
             ]
         ]
     },
     {
-        "id": "cd174c5fbc99a501",
+        "id": "e86f5c0ac9645f67",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "reset counter",
         "func": "let i=parseInt(flow.get('i'));\n\nif (i > 30){\n    flow.set('i',-1);\n}\n\nreturn msg;",
         "outputs": 1,
@@ -420,14 +420,14 @@
         "y": 300,
         "wires": [
             [
-                "4b835269d68806ed"
+                "0313508c4519f2f9"
             ]
         ]
     },
     {
-        "id": "9a5eee6a44b2696f",
+        "id": "07cd76ea63ec7791",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "delay 10 segs",
         "func": "let i=parseInt(flow.get('i'));\n\nif (i % 2 === 0){\n    msg.payload = true;\n}else{\n    msg.payload = false;\n}\nreturn msg;\n",
         "outputs": 1,
@@ -439,14 +439,14 @@
         "y": 380,
         "wires": [
             [
-                "a26d51cbd4ee396d"
+                "3cdf61bb1f40c6c5"
             ]
         ]
     },
     {
-        "id": "88f2c76611bf8862",
+        "id": "7e123dc4cdf57e38",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "delay 2,5 min",
         "func": "let i=parseInt(flow.get('i'));\n\n//node.warn(\"Valor de 'i': \" + i);\n\nif (i % 30 === 0){\n    msg.payload = true;\n}else{\n    msg.payload = false;\n}\nreturn msg;\n",
         "outputs": 1,
@@ -458,14 +458,14 @@
         "y": 460,
         "wires": [
             [
-                "a26d51cbd4ee396d"
+                "3cdf61bb1f40c6c5"
             ]
         ]
     },
     {
-        "id": "a26d51cbd4ee396d",
+        "id": "3cdf61bb1f40c6c5",
         "type": "switch",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "property": "payload",
         "propertyType": "msg",
@@ -484,17 +484,17 @@
         "y": 340,
         "wires": [
             [
-                "c0ed29937ee3e90d"
+                "8316fbb624219073"
             ],
             [
-                "cd174c5fbc99a501"
+                "e86f5c0ac9645f67"
             ]
         ]
     },
     {
-        "id": "8a8fd79e8954e3e0",
+        "id": "77d074528e6accdf",
         "type": "mqtt in",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "topic": "teslamate/cars/1/#",
         "qos": "2",
@@ -507,14 +507,14 @@
         "y": 120,
         "wires": [
             [
-                "1558eaeed98e5807"
+                "59de0db5f03e7f93"
             ]
         ]
     },
     {
-        "id": "c595158f4b2590b2",
+        "id": "b1de2e50452fdfe0",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "short topic",
         "func": "var short_topic = msg.topic.substring(17);\nmsg.topic = short_topic;\nflow.set(msg.topic, msg.payload);\n//node.warn(msg.topic + \": \" + msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -526,14 +526,14 @@
         "y": 240,
         "wires": [
             [
-                "ab7665f65b2617e4"
+                "e571fd9102e849b4"
             ]
         ]
     },
     {
-        "id": "e28a3cef850df1d1",
+        "id": "a7e0664ba9de83d5",
         "type": "comment",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "MQTT to Telegram",
         "info": "",
         "x": 110,
@@ -541,9 +541,9 @@
         "wires": []
     },
     {
-        "id": "3cf08632a6d374b1",
+        "id": "9ae4d452a5f6145e",
         "type": "comment",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "MQTT to ABRP",
         "info": "",
         "x": 1380,
@@ -551,16 +551,16 @@
         "wires": []
     },
     {
-        "id": "6be647134118cf19",
+        "id": "322d47c007f727d9",
         "type": "telegram command",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "/Start",
         "command": "/Start",
         "description": "",
         "registercommand": false,
         "language": "",
         "scope": "default",
-        "bot": "13c2734f57e9b03e",
+        "bot": "459d96c62d8d6e7e",
         "strict": false,
         "hasresponse": false,
         "useregex": false,
@@ -570,32 +570,32 @@
         "y": 1340,
         "wires": [
             [
-                "bc3d52b9a0f01df2",
-                "0a068af0dd8e121d"
+                "4e8a9c45d3c4b3d3",
+                "1654e644c8b93a25"
             ]
         ]
     },
     {
-        "id": "3f9fcfcda9083fe0",
+        "id": "e2764a691b2a1a68",
         "type": "telegram event",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
-        "bot": "13c2734f57e9b03e",
+        "bot": "459d96c62d8d6e7e",
         "event": "callback_query",
         "autoanswer": false,
         "x": 100,
         "y": 1460,
         "wires": [
             [
-                "c710b2cdd30da252",
-                "8ec4441ffcfee78e"
+                "f86a0e271eadddce",
+                "4eea507953aeffe9"
             ]
         ]
     },
     {
-        "id": "c710b2cdd30da252",
+        "id": "f86a0e271eadddce",
         "type": "switch",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "property": "payload.content",
         "propertyType": "msg",
@@ -638,45 +638,45 @@
         "y": 1460,
         "wires": [
             [
-                "536bf612679ffcb1"
+                "51064b9cf8d2282d"
             ],
             [
-                "37ef089b3c099485"
+                "2e2d74be504855a8"
             ],
             [
-                "a0bf019d11dc2c67"
+                "45647267c8098989"
             ],
             [
-                "ee928702fa52a36a"
+                "23a8738833246d23"
             ],
             [
-                "c16d3d05f128d577"
+                "ff2f3cf5e628698b"
             ],
             [
-                "181fb740314c42e9"
+                "855d2429b7494ab1"
             ]
         ]
     },
     {
-        "id": "b58da00b377a4021",
+        "id": "7b53a161e48d7ee2",
         "type": "telegram sender",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "send response",
-        "bot": "13c2734f57e9b03e",
+        "bot": "459d96c62d8d6e7e",
         "haserroroutput": false,
         "outputs": 1,
         "x": 1280,
         "y": 1460,
         "wires": [
             [
-                "03321c15999c6456"
+                "6d920fc452126a42"
             ]
         ]
     },
     {
-        "id": "fba634f171b61657",
+        "id": "8d606d8349ccb03d",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "format message",
         "func": "let content = ((msg.topic !== undefined) ? msg.topic : '') + `\n*** Opcions disponibles ***\n`;\n\nlet opts = {\n    parse_mode: \"HTML\",\n    disable_web_page_preview: true,\n    reply_markup: msg.buttons\n};\n\nmsg.payload = {\n    chatId: flow.get('telegram_chatId'),\n    type: 'message',\n    options: opts,\n    content: content\n}\n\nreturn [msg];\n",
         "outputs": 1,
@@ -688,15 +688,15 @@
         "y": 1460,
         "wires": [
             [
-                "b58da00b377a4021",
-                "4ca93deb3a5e22dc"
+                "7b53a161e48d7ee2",
+                "14c92fbf8ed4d42b"
             ]
         ]
     },
     {
-        "id": "37ef089b3c099485",
+        "id": "2e2d74be504855a8",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "recharge summary",
         "func": "/* temporarly disable */\n//return;\n\nlet state = flow.get(\"state\");\nlet bat = '';\nlet battery_level = flow.get('battery_level');\nlet usable_battery_level = flow.get('usable_battery_level');\nlet energyAdd = flow.get(\"charge_energy_added\");\nlet energyUsed = flow.get(\"energyUsed\");\nlet efficiency = (energyAdd*100/energyUsed).toFixed(2);\nlet timeOfCharge = flow.get('timeOfCharge')\nlet maxPower = flow.get('maxPower');\nlet avgPower = flow.get('avgPower');\nlet start_soc = flow.get(\"startCBL\");;\nlet end_soc = flow.get(\"endCBL\");\nlet textTypeCharge = \"\";\n\nif (usable_battery_level !== battery_level){\n    bat = `Bateria usable ${usable_battery_level}% (<i>${battery_level}%</i>) - ${flow.get('rated_battery_range_km')}km`;\n}else{\n    bat = `Bateria disponible ${usable_battery_level}% - ${flow.get('rated_battery_range_km')}km`;\n}\n\nif (state === \"charging\"){\n    // Remaining\n    let time_to_full = flow.get(\"time_to_full_charge\");\n    let remaining = time_to_full.split('.');\n    let minutes = Math.ceil(60 * Number(\".\" + remaining[1]));\n    let total_minutes = (remaining[0]*60)+minutes;\n    let finish_date = Date.now() + (total_minutes*60000);\n    let new_date = new Date(finish_date);\n    let str_new_date = new_date.toLocaleTimeString('es-ES', {timeZone: 'Europe/Madrid', hour12: false, hour: '2-digit', minute: '2-digit' });\n    let start_date = new Date(flow.get('startCharge')).toLocaleTimeString('es-ES', { timeZone: 'Europe/Madrid', hour12: false, hour: '2-digit', minute: '2-digit' });\n\n    let how_long = \"\";\n    if(remaining[0] > 0){\n        how_long = `${remaining[0]}h ${minutes}m`;\n    } else {\n        how_long = `${minutes}m`;\n    }\n    \n    let voltage = \"\";\n    let amps = \"\";\n    let chargeType = '';\n    if (parseInt(flow.get(\"charger_voltage\")) === 2){\n        chargeType = `DC`;\n        flow.set(\"typeCharge\", 2);\n    }else{\n        chargeType = `AC ${(flow.get(\"charger_phases\") === \"1\")? 'monofàsica' : 'trifàsica'}`;\n        flow.set(\"typeCharge\", 1);\n        \n        voltage = `⚡️ Voltatge: ${flow.get(\"charger_voltage\")}V`;\n        amps = `⚡️ Intensitat: ${flow.get(\"charger_actual_current\")}A`;\n    }\n    \n    msg.topic = `*** <a href=\"http://192.168.1.139:3000/d/K9VmZD54k/current-charge-view?orgId=1\">Resum càrrega</a> ***\n    \n        🔌  Cargant amb ${chargeType} a ${Math.abs(flow.get(\"power\"))}kW\n        🪫  ${bat}\n        ✅ Inici de càrrega a les ${start_date}\n        🔋  Límit de càrrega ${flow.get(\"charge_limit_soc\")}%\n        ⌛️  Temps per finalitzar càrrega: ${how_long} \n        ⏱  Hora de finalització càrrega: ${str_new_date}\n    `;\n\n    if (parseInt(flow.get(\"charger_voltage\")) !== 2) {\n        msg.topic += `    ${voltage}\n        ${amps}\n        🔋 ${energyAdd}kWh afegits\n        `;\n    }else{\n        msg.topic += `    🔋 ${energyAdd}kWh afegits\n        `;\n    }\n\n}else{\n\n    let typeCharge = flow.get(\"typeCharge\");\n    if (typeCharge === 1){\n        if (flow.get(\"fases\") === \"1\"){\n            textTypeCharge = \"AC monofàsica\";\n        }else{\n            textTypeCharge = \"AC trifàsica\";\n        }\n    }else if(typeCharge === 2){\n        textTypeCharge = \"DC\";\n    }\n    \n    msg.topic = `*** <a href=\"http://192.168.1.139:3000/d/BHhxFeZRz/charge-details?from=${flow.get('startDateCharge')}&to=${flow.get('endDateCharge')}&var-car_id=1&var-drive_id=${flow.get('idCharge')}&orgId=1\">Resum càrrega</a> ***\n    \n        🪫 ${bat}\n        🔋 Límit de càrrega ${flow.get(\"charge_limit_soc\")}%\n        🔌 Cable ${(flow.get(\"plugged_in\") === \"true\") ? \"connectat\" : \"no connectat\"}\n        🔋 Última càrrega:\n                \n            📈  Carregat del <b>${start_soc}%</b> al <b>${end_soc}%</b>\n            ⚡️  Afegits <b>${energyAdd} kWh</b> \n                  Usats <b>${energyUsed} kWh</b> \n                  Eficiencia <b>${efficiency} %</b> \n            🔌  Afegits amb <b>${textTypeCharge} </b>\n            ⌛️  <b>${timeOfCharge}</b> \n            🦾  <b>${Math.round(avgPower)} kW</b> (max: <b>${Math.round(maxPower)} kW</b>)\n        \n    `;\n    \n}\n\n\n\nreturn msg;",
         "outputs": 1,
@@ -708,14 +708,14 @@
         "y": 1400,
         "wires": [
             [
-                "0a068af0dd8e121d"
+                "1654e644c8b93a25"
             ]
         ]
     },
     {
-        "id": "4ca93deb3a5e22dc",
+        "id": "14c92fbf8ed4d42b",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "remove last messageId",
         "func": "//node.warn(\"messageId : \" + context.global.keyboard.messageId);\nif (context.global.keyboard.messageId !== undefined){\n    msg.payload.type = 'deleteMessage';\n    msg.payload.content = context.global.keyboard.messageId;\n    context.global.keyboard.messageId = null;\n}\n\nreturn [ msg ];",
         "outputs": 1,
@@ -727,16 +727,16 @@
         "y": 1340,
         "wires": [
             [
-                "b5075c7fc0aa7063"
+                "4bf00ea2c6576743"
             ]
         ]
     },
     {
-        "id": "d2429f182df8d511",
+        "id": "9865623ee2252039",
         "type": "telegram sender",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "send response",
-        "bot": "13c2734f57e9b03e",
+        "bot": "459d96c62d8d6e7e",
         "haserroroutput": false,
         "outputs": 1,
         "x": 1600,
@@ -746,9 +746,9 @@
         ]
     },
     {
-        "id": "bc3d52b9a0f01df2",
+        "id": "4e8a9c45d3c4b3d3",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "save messageId",
         "func": "context.global.keyboard = { messageId : msg.payload.messageId };\n\nreturn [ msg ];",
         "outputs": 1,
@@ -760,14 +760,14 @@
         "y": 1340,
         "wires": [
             [
-                "4ca93deb3a5e22dc"
+                "14c92fbf8ed4d42b"
             ]
         ]
     },
     {
-        "id": "c57cd5f3e6968646",
+        "id": "faad8ca16c209b6e",
         "type": "comment",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Bot Telegram",
         "info": "",
         "x": 90,
@@ -775,9 +775,9 @@
         "wires": []
     },
     {
-        "id": "0a068af0dd8e121d",
+        "id": "1654e644c8b93a25",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "set buttons",
         "func": "let keyboards = {\n    'generic': {\n        \"inline_keyboard\": [\n            [\n                {\n                    \"text\": \"Resum general\",\n                    \"callback_data\": \"summary_global\"\n                },\n                {\n                    \"text\": `${(flow.get(\"state\") === \"charging\") ? \"🟢\" : \"🔴\"} Resum càrrega`,\n                    \"callback_data\": \"summary_recharge\"\n                },\n                {\n                    \"text\": `${(flow.get('state') === \"driving\") ? \"De ruta\" : \"Resum últim viatge\"}`,\n                    \"callback_data\": \"summary_travel\"\n                }\n            ]\n        ]\n    },\n    'viatge': {\n        \"inline_keyboard\": [\n            [\n                {\n                    \"text\": \"Resum general\",\n                    \"callback_data\": \"summary_global\"\n                },\n                {\n                    \"text\": `${(flow.get(\"state\") === \"charging\") ? \"🟢\" : \"🔴\"} Resum càrrega`,\n                    \"callback_data\": \"summary_recharge\"\n                },\n                {\n                    \"text\": `${(flow.get(\"state\") === \"driving\") ? \"🔄 Refresca\" : \"\"}`,\n                    \"callback_data\": \"summary_travel\"\n                },\n                {\n                    \"text\": \"Últims sis viatges\",\n                    \"callback_data\": \"save_lastsix\"\n                }\n            ]\n        ]\n    },\n    'sis': {\n        \"inline_keyboard\": [\n            [\n                {\n                    \"text\": \"Viatge 1\",\n                    \"callback_data\": \"Travel_1\"\n                },\n                {\n                    \"text\": \"Viatge 2\",\n                    \"callback_data\": \"Travel_2\"\n                },\n                {\n                    \"text\": \"Viatge 3\",\n                    \"callback_data\": \"Travel_3\"\n                }\n            ], \n            [\n                {\n                    \"text\": \"Viatge 4\",\n                    \"callback_data\": \"Travel_4\"\n                },\n                {\n                    \"text\": \"Viatge 5\",\n                    \"callback_data\": \"Travel_5\"\n                },\n                {\n                    \"text\": \"Viatge 6\",\n                    \"callback_data\": \"Travel_6\"\n                }\n            ], \n            [\n                {\n                    \"text\": \"Resum general\",\n                    \"callback_data\": \"summary_global\"\n                },\n                {\n                    \"text\": `${(flow.get(\"state\") === \"charging\") ? \"🟢\" : \"🔴\"} Resum càrrega`,\n                    \"callback_data\": \"summary_recharge\"\n                },\n                {\n                    \"text\": `${(flow.get('state') === \"driving\") ? \"De ruta\" : \"Resum últim viatge\"}`,\n                    \"callback_data\": \"summary_travel\"\n                }\n            ],\n            [\n                {\n                    \"text\": \"💾 Guarda Viatge\",\n                    \"callback_data\": \"save_travel\"\n                }\n            ]\n        ]\n    },\n    'controls': {\n        \"inline_keyboard\": [\n            [\n                {\n                    \"text\": \"Abrir coche\",\n                    \"callback_data\": \"controls_lock\"\n                }\n            ],\n            [\n                {\n                    \"text\": `Frunk`,\n                    \"callback_data\": \"controls_frunk\"\n                },\n                {\n                    \"text\": \"Maletero\",\n                    \"callback_data\": \"controls_trunk\"\n                },\n                {\n                    \"text\": `Puerto de carga`,\n                    \"callback_data\": \"controls_charge_port\"\n                }\n            ],\n            [\n                {\n                    \"text\": `Ráfaga luces`,\n                    \"callback_data\": \"controls_flash_lights\"\n                },\n                {\n                    \"text\": \"Tocar claxon\",\n                    \"callback_data\": \"controls_honk_horn\"\n                },\n                {\n                    \"text\": `Arrancar coche`,\n                    \"callback_data\": \"controls_remote_start\"\n                }\n            ],\n            [\n                {\n                    \"text\": `Volver`,\n                    \"callback_data\": \"back\"\n                }\n            ]\n        ]\n    },\n    'security': {\n        \"inline_keyboard\": [\n            [\n                {\n                    \"text\": \"Resumen general\",\n                    \"callback_data\": \"resume\"\n                },\n                {\n                    \"text\": `${(flow.get(\"state\") === \"charging\") ? \"🟢\" : \"🔴\"} Resumen carga`,\n                    \"callback_data\": \"recharge\"\n                }\n            ],\n            [\n                {\n                    \"text\": `Volver`,\n                    \"callback_data\": \"back\"\n                }\n            ]\n        ]\n    }\n};\n\nlet selectedKeyboard = {};\n\nif (keyboards[msg.payload.content] !== undefined) {\n    selectedKeyboard = keyboards[msg.payload.content];\n} else {\n    selectedKeyboard = keyboards['generic'];\n}\n\nmsg.buttons = JSON.stringify(selectedKeyboard);\n\n\nreturn msg;",
         "outputs": 1,
@@ -789,31 +789,31 @@
         "y": 1460,
         "wires": [
             [
-                "fba634f171b61657"
+                "8d606d8349ccb03d"
             ]
         ]
     },
     {
-        "id": "0e7c6c5a68a5c486",
+        "id": "412a3fc6f3756b3d",
         "type": "link in",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Actions switch",
         "links": [
-            "2f5d7807a327af8e",
+            "256bab6b1a88bfb9",
             "aa04b84720fe3b59"
         ],
         "x": 55,
         "y": 1880,
         "wires": [
             [
-                "c7ca7fe89fdcb639"
+                "e0b03872a1ea28d7"
             ]
         ]
     },
     {
-        "id": "8ec4441ffcfee78e",
+        "id": "4eea507953aeffe9",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "save messageId",
         "func": "context.global.keyboard = { messageId : msg.payload.messageId };\nflow.set('saveMessage', msg.payload.messageId);\nreturn [ msg ];",
         "outputs": 1,
@@ -828,9 +828,9 @@
         ]
     },
     {
-        "id": "b5075c7fc0aa7063",
+        "id": "4bf00ea2c6576743",
         "type": "switch",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "property": "payload.content",
         "propertyType": "msg",
@@ -850,16 +850,16 @@
         "wires": [
             [],
             [
-                "d2429f182df8d511"
+                "9865623ee2252039"
             ]
         ]
     },
     {
-        "id": "1558eaeed98e5807",
+        "id": "59de0db5f03e7f93",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "variables",
-        "func": "\n// Telegram\nflow.set('telegram_chatId', '000000000');\nflow.set('telegram_token', '0000000000:XXXXXXXXXXXXXXXXXXXX')\n\n// ABRP\nflow.set('abrp_user_token', 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX');\nflow.set('abrp_car_model', 'tesla:my:22:my_lfp:rwd');\nflow.set('abrp_api_key', 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX');\n\n//geoapigy\n/*\n    Use geoapify to get adres\n    site to get apykey https://myprojects.geoapify.com/api\n*/\n\nflow.set('geoAPY', \"XXXXXXXXXXXXXXXXXXXXXXXXXX\");\nreturn msg;",
+        "func": "\n// Telegram\nflow.set('telegram_chatId', '000000000');\nflow.set('telegram_token', '0000000000:XXXXXXXXXXXXXXXXXXXX')\n\n// ABRP\nflow.set('abrp_user_token', 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX');\nflow.set('abrp_car_model', 'tesla:my:22:my_lfp:rwd');\nflow.set('abrp_api_key', 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX');\n\n//geoapigy\n/*\n    Use geoapify to get adres\n    site to get apykey https://myprojects.geoapify.com/api\n*/\n\nflow.set('geoAPY', \"XXXXXXXXXXXXXXXXXXXXXXXXXX\");\n\n/*Configuració automissatges\nResum viatge\nVariable per activar desactivar els missatges de resum del viatge*/\n\nflow.set(\"sumaryTravel\", \"Yes\");\n\n//Variable per definir la distància mínima, en km, per enviar el missatge\n\nflow.set(\"travelDist\", 25);\n\n/*Resum càrrega\nVariable per activar desactivar els missatges de resum de la càrrega*/\n\nflow.set(\"sumaryCharge\", \"Yes\");\n\n//Variable per definir la quantitat mínima d'energia carregada, en kWh, per enviar el missatge\n\nflow.set(\"chargeEnergy\", 2);\n\n/*Resum quant el cotxe dorm\nVariable per activar missatge resum quan el cotxe es posa a dormir*/\n\nflow.set(\"sumarySleep\", \"Yes\");\n\n/*Últims 6 viatges\nVariable per definir la distància mínima, en km, per guardar el trajecte en la llista dels 6 últims missatges*/\n\nflow.set(\"distLastSix\", 2);\n\nreturn msg",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -869,14 +869,14 @@
         "y": 180,
         "wires": [
             [
-                "c595158f4b2590b2"
+                "b1de2e50452fdfe0"
             ]
         ]
     },
     {
-        "id": "401849d543c1e2c1",
+        "id": "aaf9072cd7806e8d",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "state changes",
         "func": "let new_state = msg.payload;\nlet previous_state = flow.get('state');\n\n//node.warn(msg.topic + \": \" + msg.payload);\n//flow.set(msg.topic, new_state);\n\nif (previous_state !== new_state){\n    if (new_state === \"online\"){\n        msg.topic = `✨ està despert`;\n    }else if (new_state === \"asleep\"){\n        msg.topic = `💤 està dormit`;\n        flow.set('sent_resumen','0');\n    }else if (new_state === \"suspended\"){\n        msg.topic = `🛏️ s'està dormint`;\n    }else if (new_state === \"charging\"){\n        msg.topic = `🔌 està carregant`;\n    }else if (new_state === \"offline\"){\n        msg.topic = `🛰️ no està connectat`;\n    }else if (new_state === \"start\"){\n        msg.topic = `🚀 està arrencant`;\n    }else if (new_state === \"driving\"){\n        msg.topic = `🏁 està en marxa`;\n    }else{\n        msg.topic = `⭕ amb estat desconegut`;\n    }\n}else{\n    return;\n}\nreturn msg;\n",
         "outputs": 1,
@@ -888,14 +888,14 @@
         "y": 60,
         "wires": [
             [
-                "a33d94f33f79694f"
+                "94c4727fcd950a17"
             ]
         ]
     },
     {
-        "id": "a0bf019d11dc2c67",
+        "id": "45647267c8098989",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "summary_travel",
         "func": "let start = flow.get(\"dades_start\") || [];\nlet end = flow.get(\"dades_end\") || [];\nlet hSortida = new Date(start[0]*1000).toLocaleTimeString('es-ES', { timeZone: 'Europe/Madrid', hour12: false, hour: '2-digit', minute: '2-digit' })\nlet hArribada = (end[0] !== undefined) ? `(${new Date(end[0]*1000).toLocaleTimeString('es-ES', { timeZone: 'Europe/Madrid', hour12: false, hour: '2-digit', minute: '2-digit' })}):</b>` : \":</b>\"\nlet geo = '';\nlet geofence = flow.get('geofence');\nlet latitude = flow.get('latitude');\nlet longitude = flow.get('longitude');\nlet max_speed = flow.get('max_speed');\nlet avg_speed = flow.get('avg_speed').toFixed(0);\nlet vel = flow.get('vel') || [];\nlet max_temp = flow.get('maxTemp').toFixed(1);\nlet min_temp = flow.get('minTemp').toFixed(1);\nlet avg_temp = flow.get('avgTemp').toFixed(1);\nlet altitude = flow.get('altitude') || [];\nlet maxIn_temp = flow.get('maxInTemp').toFixed(1);\nlet minIn_temp = flow.get('minInTemp').toFixed(1);\nlet avgIn_temp = flow.get('avgInTemp').toFixed(1);\nlet onclimate = flow.get('onclimate');\nlet offclimate = flow.get('offclimate');\nlet climatetime = flow.get('climatetime');\nlet energyTravel = flow.get(\"energyTravel\");\n\nfunction site(geofence, latitude, longitude, adres) {\n    if (adres == undefined) {\n        return \"En camí\"\n    } else {\n        if (geofence !== \"\" && geofence !== undefined) {\n            return `<a href=\"https://maps.google.com/maps?q=${latitude},${longitude}\">${geofence}</a>`;\n        } else {\n            return `<a href=\"https://maps.google.com/maps?q=${latitude},${longitude}\">${adres}</a>`;\n        }\n    }\n}\n\nfunction kilometers(km_inici, km_final) {\n    if (km_final == undefined) {\n        let kmactual = flow.get('odometer');\n        return (kmactual - km_inici).toFixed(2)\n    } else {\n        return (km_final - km_inici).toFixed(2)\n    }\n}\n\nfunction diftemps(temp_final, temp_inici) {\n    if (temp_final !== undefined) {\n        var timeDifference = temp_final - temp_inici;\n        var differenceDate = new Date(timeDifference * 1000);\n        var diffHours = differenceDate.getUTCHours();\n        var diffMinutes = differenceDate.getUTCMinutes();\n        var diffSeconds = differenceDate.getUTCSeconds();\n\n        if (diffMinutes == 0) {\n            return diffSeconds + ' s';\n\n        } else if (diffHours == 0) {\n            return diffMinutes + ' m : ' + diffSeconds + ' s';\n        } else {\n            return diffHours + ' h : ' + diffMinutes + ' m : ' + diffSeconds + ' s';\n        }\n    } else {\n        let tempnow = Math.round(Date.now() / 1000);\n        var timeDifference = tempnow - temp_inici;\n        var differenceDate = new Date(timeDifference * 1000);\n        var diffHours = differenceDate.getUTCHours();\n        var diffMinutes = differenceDate.getUTCMinutes();\n        var diffSeconds = differenceDate.getUTCSeconds();\n\n        if (diffMinutes == 0) {\n            return diffSeconds + ' s';\n\n        } else if (diffHours == 0) {\n            return diffMinutes + ' m : ' + diffSeconds + ' s';\n        } else {\n            return diffHours + ' h : ' + diffMinutes + ' m : ' + diffSeconds + ' s';\n        }\n    }\n\n}\n\nfunction mode (arr) {\n    const mode = {};\n    let max = 0, count = 0;\n\n    for (let i = 0; i < arr.length; i++) {\n        const item = arr[i];\n\n        if (mode[item]) {\n            mode[item]++;\n        } else {\n            mode[item] = 1;\n        }\n\n        if (count < mode[item]) {\n            max = item;\n            count = mode[item];\n        }\n    }\n\n    return max;\n};\n\nfunction climateuse(starttimetravel, endtimetravel, timeAc, onclima) {\n    let hores_ac = 0;\n    let minuts_ac = 0;\n    let seg_ac = 0;\n\n    let hores_v = 0;\n    let minuts_v = 0;\n    let seg_v = 0;\n\n    if (timeAc == 0 && onclima == 0) {\n        return \"A/C: Apagat\"\n    } else if (timeAc > 0 && onclima > 0) {\n\n        let time = Date.now();\n        let diftime = timeAc + (time - onclima);\n        let lasttime = new Date(diftime);\n        hores_ac += lasttime.getUTCHours();\n        minuts_ac += lasttime.getUTCMinutes();\n        seg_ac += lasttime.getUTCSeconds();\n\n    } else if (onclima > 0) {\n\n        let time3 = Date.now();\n        let diftime = time3 - onclima;\n        let lasttime = new Date(diftime);\n        hores_ac += lasttime.getUTCHours();\n        minuts_ac += lasttime.getUTCMinutes();\n        seg_ac += lasttime.getUTCSeconds();\n\n    } else if (timeAc > 0) {\n\n        let time = new Date(timeAc);\n        hores_ac += time.getUTCHours();\n        minuts_ac += time.getUTCMinutes();\n        seg_ac += time.getUTCSeconds();\n    }\n\n    if (endtimetravel !== undefined) {\n        var timeDifference = endtimetravel - starttimetravel;\n        var differenceDate = new Date(timeDifference * 1000);\n        hores_v = differenceDate.getUTCHours();\n        minuts_v = differenceDate.getUTCMinutes();\n        seg_v = differenceDate.getUTCSeconds();\n    } else {\n        let tempnow = Math.round(Date.now() / 1000);\n        var timeDifference = tempnow - starttimetravel;\n        var differenceDate = new Date(timeDifference * 1000);\n        hores_v = differenceDate.getUTCHours();\n        minuts_v = differenceDate.getUTCMinutes();\n        seg_v = differenceDate.getUTCSeconds();\n    }\n\n    let htm = hores_ac * 60;\n    let stm = seg_ac / 60;\n    let totalmin = minuts_ac + htm + stm;\n    let htm_v = hores_v * 60;\n    let stm_v = seg_v / 60;\n    let totalmin_v = minuts_v + htm_v + stm_v;\n    let useAC = Math.round(totalmin * 100 / totalmin_v);\n\n    if (hores_ac == 0 && minuts_ac == 0) {\n        return `A/C: ${seg_ac} s (${useAC}%)`\n    } else if (hores_ac == 0) {\n        return `A/C: ${minuts_ac} m : ${seg_ac} s (${useAC}%)`\n    } else {\n        return `A/C: ${hores_ac} h : ${minuts_ac} m : ${seg_ac} s (${useAC}%)`\n    }\n}\n\nfunction battery(end_lvl, start_lvl, energyUsed, km_inici, km_final) {\n    if (end_lvl == undefined) {\n        let lvl_now = flow.get('battery_level');\n        return `Inicial: ${start_lvl}% \n                Actual: ${lvl_now}%  \n                Utilitzada: ${(lvl_now - start_lvl) * -1}% `\n    } else {\n        if (energyUsed != -100) {\n            let consum = (energyUsed / (km_final - km_inici) * 1000).toFixed(0);\n            return `Inicial: ${start_lvl}% \n                Final: ${end_lvl}% \n                Utilitzada: ${(end_lvl - start_lvl) * -1}%\n                Energia usada: ${energyUsed} kWh\n                Consum: ${consum} Wh/km`\n        }else{\n            return `Inicial: ${start_lvl}% \n                Final: ${end_lvl}% \n                Utilitzada: ${(end_lvl - start_lvl) * -1}%`\n        }   \n    }\n}\n\nfunction desnivell(array) {\n    var desnivell_positiu = 0;\n    var desnivell_negatiu = 0;\n\n    for (var i = 1; i < array.length; i++) {\n        var diferencial = array[i] - array[i - 1];\n        if (diferencial > 0) {\n            desnivell_positiu += diferencial;\n        }\n        else {\n            desnivell_negatiu -= diferencial;\n        }\n    }\n    return `Positiu: ${desnivell_positiu} m\n                Negatiu: ${desnivell_negatiu * -1} m\n                Acumulat: ${desnivell_positiu + desnivell_negatiu} m`\n}\n\nmsg.topic = `*** <a href=\"http://192.168.1.139:3000/d/zm7wN6Zgz/drive-details?from=${flow.get('startDateDrive')}&to=${flow.get('endDateDrive')}&var-car_id=1&var-drive_id=${flow.get('idDrive')}&orgId=1\">Resum últim viatge</a> ***\n    \n    ➡️  <b>Sordida (${hSortida}): </b>\n                ${site(start[1], start[2], start[3], start[4])}\n    🔚  <b>Arribada ${hArribada}\n                ${site(end[1], end[2], end[3], end[4])}\n    🛣️  <b>km:</b> \n                ${kilometers(start[5], end[5])} km\n    ⏱️  <b>Temps:</b> \n                ${diftemps(end[0], start[0])}\n    🏎️  <b>Velocitat:</b>\n                Mitja: ${avg_speed} km/h\n                Màxima: ${max_speed} km/h  \n                Moda: ${mode(vel)} km/h       \n    🔋  <b>Bateria:</b>\n                ${battery(end[6], start[6], energyTravel, start[5], end[5])}\n    🏔  <b>Desnivell:</b>\n                ${desnivell(altitude)}\n    🌡️ <b>Temperatura:</b>\n                             <u><i>Exterior</i>           <i>Interior</i>  </u>\n                <u><i>Màxima</i>     ${max_temp} °C           ${maxIn_temp} °C</u>\n                <u><i>Mínima</i>      ${min_temp} °C           ${minIn_temp} °C</u>\n                <u><i>Mitja</i>         ${avg_temp} °C           ${avgIn_temp} °C</u>\n                ${climateuse(start[0], end[0], climatetime, onclimate)}\n        `;\n    \nmsg.payload.content = 'viatge';\n\nreturn msg;",
         "outputs": 1,
@@ -907,14 +907,14 @@
         "y": 1460,
         "wires": [
             [
-                "0a068af0dd8e121d"
+                "1654e644c8b93a25"
             ]
         ]
     },
     {
-        "id": "a622eb55ea1ec50a",
+        "id": "cc2b6b835d2c23c6",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "States_viatge",
         "func": "/*\n    Catch and reset values of start and end point travel \n*/ \nlet dades_start = [];\nlet dades_end = [];\nlet geofence = flow.get('geofence');\nlet latitude = flow.get('latitude');\nlet longitude = flow.get('longitude');\nlet adres = \"\";\nlet kilometres = flow.get('odometer');\nlet bat = flow.get('battery_level');\nlet wats = flow.get(\"power\");\nlet speed = flow.get('speed');\n\nswitch (flow.get('state')){\n    case \"driving\":\n        //reset final array\n        dades_end = [];\n        //reset speed and temp\n        msg.reset = 0;\n        //reset array moda\n        let vel = [];\n        //reset altitude\n        let altitude = [];\n        //let des_pos = 0;\n        //let des_neg = 0;\n        //reset in temp\n        let onclimate = 0;\n        let offclimate = 0;\n        let climatetime = 0;\n        //date\n        dades_start.push(Math.round(Date.now() / 1000));\n        //site\n        dades_start.push(geofence, latitude, longitude, adres);\n        //km\n        dades_start.push(kilometres);\n        //batery level\n        dades_start.push(bat);\n\n        //set variable flow values\n        flow.set('onclimate', onclimate);\n        flow.set('offclimate', offclimate);\n        flow.set('climatetime', climatetime);\n        flow.set('altitude', altitude);\n        //flow.set('des_pos', des_pos);\n        //flow.set('des_neg', des_neg);\n        flow.set('vel', vel);\n        flow.set(\"dades_start\", dades_start);\n        flow.set(\"dades_end\", dades_end);\n        break;\n    case \"online\":\n        if(dades_end.length == 0){\n            //date\n            dades_end.push(Math.round(Date.now() / 1000));\n            //site\n            dades_end.push(geofence, latitude, longitude, adres);\n            //km\n            dades_end.push(kilometres);\n            //batery level\n            dades_end.push(bat);\n\n            //set variable flow values\n            flow.set(\"dades_end\", dades_end);\n            break;\n        }\n}\nflow.set(\"etapes\", \"\");\n\nreturn msg;",
         "outputs": 1,
@@ -926,25 +926,25 @@
         "y": 700,
         "wires": [
             [
-                "16181c51e785c06b",
-                "e60eabae4d1aab24",
-                "3a94018bbf98e1dd",
-                "72cd3ae89df0d454",
-                "d03973ca6d5c0f95",
-                "34a6cf17969b95d8",
-                "4bc8ed837f8ba608",
-                "fef0d377327dfb0e",
-                "e7c6b7d3bd3c5e89",
-                "46cd8225792210f1",
-                "5335d1d42c7ed194",
-                "d8bb4149ceca73a1"
+                "dcb9c457edb1a1a0",
+                "5b26a5f1dd492f04",
+                "338b7a781a650667",
+                "9ebefdc503f6927e",
+                "0801954783f1c5a9",
+                "caccb8fc25b0517e",
+                "067d4226277c3222",
+                "6cb7097171d37ffc",
+                "7ec4dbef9d2074ed",
+                "35912263d1ae152e",
+                "eb8bcdc9c0c5af9d",
+                "fe472aaa1bd1207d"
             ]
         ]
     },
     {
-        "id": "f521fda500a5cd06",
+        "id": "caa9522176f2e813",
         "type": "comment",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Resum últim viatge",
         "info": "",
         "x": 110,
@@ -952,9 +952,9 @@
         "wires": []
     },
     {
-        "id": "6488355b1867468b",
+        "id": "8a55198eeff90430",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Speed Max",
         "func": "flow.set(\"max_speed\", msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -969,9 +969,9 @@
         ]
     },
     {
-        "id": "531b7b19660d3b6c",
+        "id": "8488e85c777aebde",
         "type": "inject",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "props": [
             {
@@ -988,14 +988,14 @@
         "y": 760,
         "wires": [
             [
-                "8005a6e7156dbac6"
+                "f04031b25551e6dd"
             ]
         ]
     },
     {
-        "id": "8005a6e7156dbac6",
+        "id": "f04031b25551e6dd",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Get speed",
         "func": "//get value of speed when state is driving\n\nvar speed = flow.get('speed');\nlet vel = flow.get('vel') || [];\n\nswitch (flow.get('state')) {\n    case \"driving\":\n        if (speed > 0){\n            vel.push(speed);\n        }\n        msg.payload = speed;\n        flow.set('vel', vel);\n        return msg;\n}\nreturn msg",
         "outputs": 1,
@@ -1007,15 +1007,15 @@
         "y": 760,
         "wires": [
             [
-                "16181c51e785c06b",
-                "d03973ca6d5c0f95"
+                "dcb9c457edb1a1a0",
+                "0801954783f1c5a9"
             ]
         ]
     },
     {
-        "id": "16181c51e785c06b",
+        "id": "dcb9c457edb1a1a0",
         "type": "smooth",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Max Vel",
         "property": "payload",
         "action": "max",
@@ -1027,14 +1027,14 @@
         "y": 740,
         "wires": [
             [
-                "6488355b1867468b"
+                "8a55198eeff90430"
             ]
         ]
     },
     {
-        "id": "10204c2cfc38a340",
+        "id": "40e44b9916d8172c",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "GetAdreça",
         "func": "let apykey = flow.get('geoAPY');\nlet dades_start = flow.get(\"dades_start\") || [];\nlet dades_end = flow.get(\"dades_end\") || [];\n\nswitch (flow.get('state')) {\n    case \"driving\":\n        let latstart = dades_start[2];\n        let longstart = dades_start[3];\n        var url = `https://api.geoapify.com/v1/geocode/reverse?lat=${latstart}&lon=${longstart}&format=json&apiKey=${apykey}`\n        msg.url = url;\n        break;\n    case \"online\":\n        let latend = dades_end[2];\n        let longend = dades_end[3];\n        var url = `https://api.geoapify.com/v1/geocode/reverse?lat=${latend}&lon=${longend}&format=json&apiKey=${apykey}`\n        msg.url = url;\n        break;\n}\n\n\nreturn msg;\n\n\n",
         "outputs": 1,
@@ -1046,14 +1046,14 @@
         "y": 1240,
         "wires": [
             [
-                "5f7e4cea77c38bd7"
+                "cca54c604edc25ca"
             ]
         ]
     },
     {
-        "id": "5f7e4cea77c38bd7",
+        "id": "cca54c604edc25ca",
         "type": "http request",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "HTTP Request (GET)",
         "method": "GET",
         "ret": "txt",
@@ -1070,14 +1070,14 @@
         "y": 1240,
         "wires": [
             [
-                "61295a41d4e7857b"
+                "36821f7bc29e31de"
             ]
         ]
     },
     {
-        "id": "61295a41d4e7857b",
+        "id": "36821f7bc29e31de",
         "type": "json",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "property": "payload",
         "action": "",
@@ -1086,14 +1086,14 @@
         "y": 1240,
         "wires": [
             [
-                "1475a8b8ba5a1622"
+                "57e522613791321d"
             ]
         ]
     },
     {
-        "id": "1475a8b8ba5a1622",
+        "id": "57e522613791321d",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Adreça",
         "func": "//Set adres of start and end point travel\n\nlet dades_start = flow.get(\"dades_start\") || [];\nlet dades_end = flow.get(\"dades_end\") || [];\nlet new_state = msg.topic;\nlet previous_state = flow.get('state');\n\nswitch (flow.get('state')) {\n    case \"driving\":\n        dades_start[4] = `${msg.payload.results[0].street} ${(msg.payload.results[0].housenumber == undefined) ? \"S/N\" : msg.payload.results[0].housenumber}, ${msg.payload.results[0].city}`;//msg.payload.results[0].formatted\n        msg.topic = `${msg.payload.results[0].street} ${(msg.payload.results[0].housenumber == undefined) ? \"S/N\" : msg.payload.results[0].housenumber}, ${msg.payload.results[0].city}`;\n        flow.set(\"dades_start\", dades_start);\n        break;\n    case \"online\":\n        dades_end[4] = `${msg.payload.results[0].street} ${(msg.payload.results[0].housenumber == undefined) ? \"S/N\" : msg.payload.results[0].housenumber}, ${msg.payload.results[0].city}`;\n        msg.topic = `${msg.payload.results[0].street} ${(msg.payload.results[0].housenumber == undefined) ? \"S/N\" : msg.payload.results[0].housenumber}, ${msg.payload.results[0].city}`;\n        flow.set(\"dades_end\", dades_end);\n        break;\n}\n\n\nreturn msg;",
         "outputs": 1,
@@ -1108,9 +1108,9 @@
         ]
     },
     {
-        "id": "9a827af65c11afda",
+        "id": "48660f4f28ee34e1",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Get out temp",
         "func": "//Get out temp value when state is driving\n\nvar temp = flow.get('outside_temp');\n\nswitch (flow.get('state')) {\n    case \"driving\":\n        msg.payload = temp;\n        return msg;\n}",
         "outputs": 1,
@@ -1122,16 +1122,16 @@
         "y": 940,
         "wires": [
             [
-                "72cd3ae89df0d454",
-                "3a94018bbf98e1dd",
-                "e60eabae4d1aab24"
+                "9ebefdc503f6927e",
+                "338b7a781a650667",
+                "5b26a5f1dd492f04"
             ]
         ]
     },
     {
-        "id": "d1f7863402a9491f",
+        "id": "4b0f04101dcd84f9",
         "type": "inject",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "props": [],
         "repeat": "180",
@@ -1143,14 +1143,14 @@
         "y": 940,
         "wires": [
             [
-                "9a827af65c11afda"
+                "48660f4f28ee34e1"
             ]
         ]
     },
     {
-        "id": "72cd3ae89df0d454",
+        "id": "9ebefdc503f6927e",
         "type": "smooth",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Max Temp",
         "property": "payload",
         "action": "max",
@@ -1162,14 +1162,14 @@
         "y": 880,
         "wires": [
             [
-                "ac3ae20e84a709f5"
+                "85c3a61b86db08d6"
             ]
         ]
     },
     {
-        "id": "3a94018bbf98e1dd",
+        "id": "338b7a781a650667",
         "type": "smooth",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Min Temp",
         "property": "payload",
         "action": "min",
@@ -1181,14 +1181,14 @@
         "y": 940,
         "wires": [
             [
-                "4a679c24e199ebf7"
+                "c2d7a7ec6b0a6c06"
             ]
         ]
     },
     {
-        "id": "e60eabae4d1aab24",
+        "id": "5b26a5f1dd492f04",
         "type": "smooth",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Avg Temp",
         "property": "payload",
         "action": "mean",
@@ -1200,14 +1200,14 @@
         "y": 1000,
         "wires": [
             [
-                "6cf911097fc9e358"
+                "d1d91157956c560f"
             ]
         ]
     },
     {
-        "id": "ac3ae20e84a709f5",
+        "id": "85c3a61b86db08d6",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Temperatura Max",
         "func": "flow.set('maxTemp', msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -1222,9 +1222,9 @@
         ]
     },
     {
-        "id": "43c8a20d965a3f4d",
+        "id": "69f217d8c277d86f",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "save_travel_for6",
         "func": "let start = flow.get(\"dades_start\") || [];\nlet end = flow.get(\"dades_end\") || [];\nlet diaSortida = new Date(start[0] * 1000).toLocaleDateString();\nlet hSortida = new Date(start[0] * 1000).toLocaleTimeString('es-ES', { timeZone: 'Europe/Madrid', hour12: false, hour: '2-digit', minute: '2-digit' });\nlet hArribada = (end[0] !== undefined) ? `(${new Date(end[0] * 1000).toLocaleTimeString('es-ES', { timeZone: 'Europe/Madrid', hour12: false, hour: '2-digit', minute: '2-digit' })}):</b>` : \":</b>\"\nlet geo = '';\nlet geofence = flow.get('geofence');\nlet latitude = flow.get('latitude');\nlet longitude = flow.get('longitude');\nlet max_speed = flow.get('max_speed');\nlet avg_speed = flow.get('avg_speed').toFixed(0);\nlet vel = flow.get('vel') || [];\nlet max_temp = flow.get('maxTemp').toFixed(1);\nlet min_temp = flow.get('minTemp').toFixed(1);\nlet avg_temp = flow.get('avgTemp').toFixed(1);\nlet altitude = flow.get('altitude') || [];\nlet maxIn_temp = flow.get('maxInTemp').toFixed(1);\nlet minIn_temp = flow.get('minInTemp').toFixed(1);\nlet avgIn_temp = flow.get('avgInTemp').toFixed(1);\nlet onclimate = flow.get('onclimate');\nlet offclimate = flow.get('offclimate');\nlet climatetime = flow.get('climatetime');\nlet energyTravel = flow.get(\"energyTravel\");\n\nfunction site(geofence, latitude, longitude, adres) {\n    if (adres == undefined) {\n        return \"En camí\"\n    } else {\n        if (geofence !== \"\" && geofence !== undefined) {\n            return `<a href=\"https://maps.google.com/maps?q=${latitude},${longitude}\">${geofence}</a>`;\n        } else {\n            return `<a href=\"https://maps.google.com/maps?q=${latitude},${longitude}\">${adres}</a>`;\n        }\n    }\n}\n\nfunction kilometers(km_inici, km_final) {\n    if (km_final == undefined) {\n        let kmactual = flow.get('odometer');\n        return (kmactual - km_inici).toFixed(2)\n    } else {\n        return (km_final - km_inici).toFixed(2)\n    }\n}\n\nfunction diftemps(temp_final, temp_inici) {\n    if (temp_final !== undefined) {\n        var timeDifference = temp_final - temp_inici;\n        var differenceDate = new Date(timeDifference * 1000);\n        var diffHours = differenceDate.getUTCHours();\n        var diffMinutes = differenceDate.getUTCMinutes();\n        var diffSeconds = differenceDate.getUTCSeconds();\n\n        if (diffMinutes == 0) {\n            return diffSeconds + ' s';\n\n        } else if (diffHours == 0) {\n            return diffMinutes + ' m : ' + diffSeconds + ' s';\n        } else {\n            return diffHours + ' h : ' + diffMinutes + ' m : ' + diffSeconds + ' s';\n        }\n    } else {\n        let tempnow = Math.round(Date.now() / 1000);\n        var timeDifference = tempnow - temp_inici;\n        var differenceDate = new Date(timeDifference * 1000);\n        var diffHours = differenceDate.getUTCHours();\n        var diffMinutes = differenceDate.getUTCMinutes();\n        var diffSeconds = differenceDate.getUTCSeconds();\n\n        if (diffMinutes == 0) {\n            return diffSeconds + ' s';\n\n        } else if (diffHours == 0) {\n            return diffMinutes + ' m : ' + diffSeconds + ' s';\n        } else {\n            return diffHours + ' h : ' + diffMinutes + ' m : ' + diffSeconds + ' s';\n        }\n    }\n\n}\n\nfunction mode(arr) {\n    const mode = {};\n    let max = 0, count = 0;\n\n    for (let i = 0; i < arr.length; i++) {\n        const item = arr[i];\n\n        if (mode[item]) {\n            mode[item]++;\n        } else {\n            mode[item] = 1;\n        }\n\n        if (count < mode[item]) {\n            max = item;\n            count = mode[item];\n        }\n    }\n\n    return max;\n};\n\nfunction climateuse(starttimetravel, endtimetravel, timeAc, onclima) {\n    let hores_ac = 0;\n    let minuts_ac = 0;\n    let seg_ac = 0;\n\n    let hores_v = 0;\n    let minuts_v = 0;\n    let seg_v = 0;\n\n    if (timeAc == 0 && onclima == 0) {\n        return \"A/C: Apagat\"\n    } else if (timeAc > 0 && onclima > 0) {\n\n        let time = Date.now();\n        let diftime = timeAc + (time - onclima);\n        let lasttime = new Date(diftime);\n        hores_ac += lasttime.getUTCHours();\n        minuts_ac += lasttime.getUTCMinutes();\n        seg_ac += lasttime.getUTCSeconds();\n\n    } else if (onclima > 0) {\n\n        let time3 = Date.now();\n        let diftime = time3 - onclima;\n        let lasttime = new Date(diftime);\n        hores_ac += lasttime.getUTCHours();\n        minuts_ac += lasttime.getUTCMinutes();\n        seg_ac += lasttime.getUTCSeconds();\n\n    } else if (timeAc > 0) {\n\n        let time = new Date(timeAc);\n        hores_ac += time.getUTCHours();\n        minuts_ac += time.getUTCMinutes();\n        seg_ac += time.getUTCSeconds();\n    }\n\n    if (endtimetravel !== undefined) {\n        var timeDifference = endtimetravel - starttimetravel;\n        var differenceDate = new Date(timeDifference * 1000);\n        hores_v = differenceDate.getUTCHours();\n        minuts_v = differenceDate.getUTCMinutes();\n        seg_v = differenceDate.getUTCSeconds();\n    } else {\n        let tempnow = Math.round(Date.now() / 1000);\n        var timeDifference = tempnow - starttimetravel;\n        var differenceDate = new Date(timeDifference * 1000);\n        hores_v = differenceDate.getUTCHours();\n        minuts_v = differenceDate.getUTCMinutes();\n        seg_v = differenceDate.getUTCSeconds();\n    }\n\n    let htm = hores_ac * 60;\n    let stm = seg_ac / 60;\n    let totalmin = minuts_ac + htm + stm;\n    let htm_v = hores_v * 60;\n    let stm_v = seg_v / 60;\n    let totalmin_v = minuts_v + htm_v + stm_v;\n    let useAC = Math.round(totalmin * 100 / totalmin_v);\n\n    if (hores_ac == 0 && minuts_ac == 0) {\n        return `A/C: ${seg_ac} s (${useAC}%)`\n    } else if (hores_ac == 0) {\n        return `A/C: ${minuts_ac} m : ${seg_ac} s (${useAC}%)`\n    } else {\n        return `A/C: ${hores_ac} h : ${minuts_ac} m : ${seg_ac} s (${useAC}%)`\n    }\n}\n\nfunction battery(end_lvl, start_lvl, energyUsed, km_inici, km_final) {\n    if (end_lvl == undefined) {\n        let lvl_now = flow.get('battery_level');\n        return `Inicial: ${start_lvl}% \n                Actual: ${lvl_now}%  \n                Utilitzada: ${(lvl_now - start_lvl) * -1}% `\n    } else {\n        if (energyUsed != -100) {\n            let consum = (energyUsed / (km_final - km_inici) * 1000).toFixed(0);\n            return `Inicial: ${start_lvl}% \n                Final: ${end_lvl}% \n                Utilitzada: ${(end_lvl - start_lvl) * -1}%\n                Energia usada: ${energyUsed} kWh\n                Consum: ${consum} Wh/km`\n        } else {\n            return `Inicial: ${start_lvl}% \n                Final: ${end_lvl}% \n                Utilitzada: ${(end_lvl - start_lvl) * -1}%`\n        }\n    }\n}\n\nfunction desnivell(array) {\n    var desnivell_positiu = 0;\n    var desnivell_negatiu = 0;\n\n    for (var i = 1; i < array.length; i++) {\n        var diferencial = array[i] - array[i - 1];\n        if (diferencial > 0) {\n            desnivell_positiu += diferencial;\n        }\n        else {\n            desnivell_negatiu -= diferencial;\n        }\n    }\n    return `Positiu: ${desnivell_positiu} m\n                Negatiu: ${desnivell_negatiu * -1} m\n                Acumulat: ${desnivell_positiu + desnivell_negatiu} m`\n}\n\nmsg.topic = `*** <a href=\"http://192.168.1.139:3000/d/zm7wN6Zgz/drive-details?from=${flow.get('startDateDrive')}&to=${flow.get('endDateDrive')}&var-car_id=1&var-drive_id=${flow.get('idDrive')}&orgId=1\">Resum últim viatge ${diaSortida}</a> ***\n    \n    ➡️  <b>Sordida (${hSortida}): </b>\n                ${site(start[1], start[2], start[3], start[4])}\n    🔚  <b>Arribada ${hArribada}\n                ${site(end[1], end[2], end[3], end[4])}\n    🛣️  <b>km:</b> \n                ${kilometers(start[5], end[5])} km\n    ⏱️  <b>Temps:</b> \n                ${diftemps(end[0], start[0])}\n    🏎️  <b>Velocitat:</b>\n                Mitja: ${avg_speed} km/h\n                Màxima: ${max_speed} km/h  \n                Moda: ${mode(vel)} km/h       \n    🔋  <b>Bateria:</b>\n                ${battery(end[6], start[6], energyTravel, start[5], end[5])}\n    🏔  <b>Desnivell:</b>\n                ${desnivell(altitude)}\n    🌡️ <b>Temperatura:</b>\n                             <u><i>Exterior</i>           <i>Interior</i>  </u>\n                <u><i>Màxima</i>     ${max_temp} °C           ${maxIn_temp} °C</u>\n                <u><i>Mínima</i>      ${min_temp} °C           ${minIn_temp} °C</u>\n                <u><i>Mitja</i>         ${avg_temp} °C           ${avgIn_temp} °C</u>\n                ${climateuse(start[0], end[0], climatetime, onclimate)}\n        `;\n\nmsg.payload.content = 'viatge';\n\nreturn msg;",
         "outputs": 1,
@@ -1236,16 +1236,16 @@
         "y": 1820,
         "wires": [
             [
-                "ae4529c01e9b0eab"
+                "dfe523f0ac4f5270"
             ]
         ]
     },
     {
-        "id": "fb3e4af4c254a55a",
+        "id": "75a54aac85715418",
         "type": "telegram sender",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "send response",
-        "bot": "13c2734f57e9b03e",
+        "bot": "459d96c62d8d6e7e",
         "haserroroutput": false,
         "outputs": 1,
         "x": 1220,
@@ -1255,9 +1255,9 @@
         ]
     },
     {
-        "id": "d2a610da19c666d4",
+        "id": "b20ef36712e1cbb7",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Format message",
         "func": "let content = msg.topic;\n\nlet opts = {\n    parse_mode: \"HTML\",\n    disable_web_page_preview: true,\n};\n\nmsg.payload = {\n    chatId: flow.get('telegram_chatId'),\n    type: 'message',\n    options: opts,\n    content: content,\n}\nreturn msg;",
         "outputs": 1,
@@ -1269,14 +1269,14 @@
         "y": 1920,
         "wires": [
             [
-                "fb3e4af4c254a55a"
+                "75a54aac85715418"
             ]
         ]
     },
     {
-        "id": "d03973ca6d5c0f95",
+        "id": "0801954783f1c5a9",
         "type": "smooth",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "avg vel",
         "property": "payload",
         "action": "mean",
@@ -1288,14 +1288,14 @@
         "y": 800,
         "wires": [
             [
-                "5e80500d781d4a02"
+                "96f4c0f4812872b7"
             ]
         ]
     },
     {
-        "id": "5e80500d781d4a02",
+        "id": "96f4c0f4812872b7",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Speed Avg",
         "func": "flow.set(\"avg_speed\", msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -1310,9 +1310,9 @@
         ]
     },
     {
-        "id": "4a679c24e199ebf7",
+        "id": "c2d7a7ec6b0a6c06",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Temperatura Min",
         "func": "flow.set('minTemp', msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -1327,9 +1327,9 @@
         ]
     },
     {
-        "id": "6cf911097fc9e358",
+        "id": "d1d91157956c560f",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Temperatura Avg",
         "func": "flow.set('avgTemp', msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -1344,9 +1344,9 @@
         ]
     },
     {
-        "id": "27b92b85e68db3f7",
+        "id": "679bd7efc1377337",
         "type": "inject",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "props": [],
         "repeat": "15",
@@ -1358,14 +1358,14 @@
         "y": 1100,
         "wires": [
             [
-                "30afbb0f95259f0e"
+                "6608b3f40a7cc00c"
             ]
         ]
     },
     {
-        "id": "30afbb0f95259f0e",
+        "id": "6608b3f40a7cc00c",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Get in temp",
         "func": "//Get in temp values when state is driving\n\nlet intemp = flow.get('inside_temp');\n\n\nswitch (flow.get('state')) {\n    case \"driving\":\n        msg.payload = intemp;\n        return msg\n}",
         "outputs": 1,
@@ -1377,16 +1377,16 @@
         "y": 1100,
         "wires": [
             [
-                "34a6cf17969b95d8",
-                "4bc8ed837f8ba608",
-                "fef0d377327dfb0e"
+                "caccb8fc25b0517e",
+                "067d4226277c3222",
+                "6cb7097171d37ffc"
             ]
         ]
     },
     {
-        "id": "34a6cf17969b95d8",
+        "id": "caccb8fc25b0517e",
         "type": "smooth",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Avg Temp",
         "property": "payload",
         "action": "mean",
@@ -1398,14 +1398,14 @@
         "y": 1180,
         "wires": [
             [
-                "215e216acaf0b300"
+                "2e831111077d69e3"
             ]
         ]
     },
     {
-        "id": "215e216acaf0b300",
+        "id": "2e831111077d69e3",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Temperatura Avg",
         "func": "flow.set('avgInTemp', msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -1420,9 +1420,9 @@
         ]
     },
     {
-        "id": "fef0d377327dfb0e",
+        "id": "6cb7097171d37ffc",
         "type": "smooth",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Min Temp",
         "property": "payload",
         "action": "min",
@@ -1434,14 +1434,14 @@
         "y": 1120,
         "wires": [
             [
-                "26b1e2b022582678"
+                "fc37a3041cef3665"
             ]
         ]
     },
     {
-        "id": "4bc8ed837f8ba608",
+        "id": "067d4226277c3222",
         "type": "smooth",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Max Temp",
         "property": "payload",
         "action": "max",
@@ -1453,14 +1453,14 @@
         "y": 1060,
         "wires": [
             [
-                "43d8c07311c083cc"
+                "33f015bb46723301"
             ]
         ]
     },
     {
-        "id": "43d8c07311c083cc",
+        "id": "33f015bb46723301",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Temperatura Max",
         "func": "flow.set('maxInTemp', msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -1475,9 +1475,9 @@
         ]
     },
     {
-        "id": "26b1e2b022582678",
+        "id": "fc37a3041cef3665",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Temperatura Min",
         "func": "flow.set('minInTemp', msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -1492,9 +1492,9 @@
         ]
     },
     {
-        "id": "df0f720ab0503a51",
+        "id": "466d2d64cf428679",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Power charging",
         "func": "let power = msg.payload;\nlet state = flow.get('state');\nlet fase = flow.get('fase');\n\nif (state == 'charging') {\n    msg.payload = power;\n    fase = flow.get('charger_phases');\n    flow.set('fase', fase);\n    return msg;\n}\n",
         "outputs": 1,
@@ -1506,15 +1506,15 @@
         "y": 380,
         "wires": [
             [
-                "e7c6b7d3bd3c5e89",
-                "46cd8225792210f1"
+                "7ec4dbef9d2074ed",
+                "35912263d1ae152e"
             ]
         ]
     },
     {
-        "id": "e7c6b7d3bd3c5e89",
+        "id": "7ec4dbef9d2074ed",
         "type": "smooth",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Avg Power",
         "property": "payload",
         "action": "mean",
@@ -1526,14 +1526,14 @@
         "y": 360,
         "wires": [
             [
-                "b082a5bf0279a813"
+                "4c2e5316c93e8a6d"
             ]
         ]
     },
     {
-        "id": "46cd8225792210f1",
+        "id": "35912263d1ae152e",
         "type": "smooth",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Max Power",
         "property": "payload",
         "action": "max",
@@ -1545,14 +1545,14 @@
         "y": 400,
         "wires": [
             [
-                "488ac336e1709076"
+                "ff5ae405da6865a4"
             ]
         ]
     },
     {
-        "id": "b082a5bf0279a813",
+        "id": "4c2e5316c93e8a6d",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Avg Power",
         "func": "flow.set('avgPower', msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -1567,9 +1567,9 @@
         ]
     },
     {
-        "id": "488ac336e1709076",
+        "id": "ff5ae405da6865a4",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Max Power",
         "func": "flow.set('maxPower', msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -1584,9 +1584,9 @@
         ]
     },
     {
-        "id": "b1f04a7ddc3c27a5",
+        "id": "f26d6240c150c236",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "AC on D/O",
         "func": "//get value of is_cliamte_on when state change\n\nlet state = msg.payload;\nlet ac = flow.get('is_climate_on');\n\nswitch (state) {\n    case \"driving\":\n        msg.payload = ac;\n        return msg;\n   case \"online\":\n        msg.payload = ac;\n        return msg;\n}",
         "outputs": 1,
@@ -1598,14 +1598,14 @@
         "y": 1020,
         "wires": [
             [
-                "c71c699748f9f661"
+                "b51f2b4b8481c8ed"
             ]
         ]
     },
     {
-        "id": "c71c699748f9f661",
+        "id": "b51f2b4b8481c8ed",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "AC on",
         "func": "//Get time of A/C use \n\nlet climateState = msg.payload;\nlet onclimate = flow.get('onclimate');\nlet offclimate = flow.get('offclimate');\nlet climatetime = flow.get('climatetime');\nlet start = flow.get(\"dades_start\") || [];\nlet end = flow.get(\"dades_end\") || [];\n\nswitch (flow.get('state')) {\n    case 'driving':\n        if (climateState == 'true') {\n            onclimate = Date.now();\n        } else {\n            if (onclimate !== 0) {\n                offclimate = Date.now();\n                climatetime += offclimate - onclimate;\n                onclimate = 0;\n            }\n        }\n        flow.set('onclimate', onclimate);\n        flow.set('offclimate', offclimate);\n        flow.set('climatetime', climatetime);\n        break;\n    case 'online':\n        if (onclimate > 0 && offclimate == 0 && climateState == 'true') {\n            offclimate = Date.now();\n            climatetime += offclimate - onclimate;\n            onclimate = 0;\n\n            flow.set('onclimate', onclimate);\n            flow.set('offclimate', offclimate);\n            flow.set('climatetime', climatetime);\n        }\n        break;\n}\n",
         "outputs": 1,
@@ -1620,9 +1620,9 @@
         ]
     },
     {
-        "id": "5335d1d42c7ed194",
+        "id": "eb8bcdc9c0c5af9d",
         "type": "smooth",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Start battery level",
         "property": "payload",
         "action": "min",
@@ -1634,14 +1634,14 @@
         "y": 440,
         "wires": [
             [
-                "ca622d38bf7c46f1"
+                "6dcddb91d70f8bc1"
             ]
         ]
     },
     {
-        "id": "d8bb4149ceca73a1",
+        "id": "fe472aaa1bd1207d",
         "type": "smooth",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "End battery level",
         "property": "payload",
         "action": "max",
@@ -1653,14 +1653,14 @@
         "y": 480,
         "wires": [
             [
-                "af5ba4a34b39105c"
+                "939d437703ea11e5"
             ]
         ]
     },
     {
-        "id": "6689debbd72fed7e",
+        "id": "70d95ba58ebef14c",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "baterry level charging",
         "func": "let battery = msg.payload;\nif (flow.get('state') == 'charging') {\n    msg.payload = battery;\n    return msg;\n}\n",
         "outputs": 1,
@@ -1672,15 +1672,15 @@
         "y": 460,
         "wires": [
             [
-                "5335d1d42c7ed194",
-                "d8bb4149ceca73a1"
+                "eb8bcdc9c0c5af9d",
+                "fe472aaa1bd1207d"
             ]
         ]
     },
     {
-        "id": "ca622d38bf7c46f1",
+        "id": "6dcddb91d70f8bc1",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Start CBL",
         "func": "flow.set('startCBL', msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -1695,9 +1695,9 @@
         ]
     },
     {
-        "id": "af5ba4a34b39105c",
+        "id": "939d437703ea11e5",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "End CBL",
         "func": "flow.set('endCBL', msg.payload+1);\nreturn msg;",
         "outputs": 1,
@@ -1712,9 +1712,9 @@
         ]
     },
     {
-        "id": "426c0f1b5377b6de",
+        "id": "887aa94523f551d0",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Time charge",
         "func": "let currentState = flow.get(\"currentState\");\nlet oldState = flow.get(\"oldState\");\nlet startCharge = flow.get(\"startCharge\");\nlet endCharge = flow.get(\"endCharge\");\n\nfunction changeState(newState) {\n    oldState = currentState;\n    currentState = newState;\n    flow.set(\"oldState\", oldState);\n    flow.set(\"currentState\", currentState);\n}\n\nchangeState(msg.payload);\n\nif (oldState !== currentState) {\n    if (currentState === \"charging\") {\n        startCharge = Date.now();\n        flow.set(\"startCharge\", startCharge)\n        flow.set('kmCharge', flow.get('odometer'));\n    }\n}\n\nif (oldState == \"charging\" && currentState == \"online\") {\n    endCharge = Date.now();\n    flow.set(\"endCharge\", endCharge);\n}\n\n\nfunction timeCharge(startTime, endTime) {\n    let time = new Date(endTime - startTime);\n    let hores = time.getUTCHours();\n    let minuts = time.getUTCMinutes();\n    let seg = time.getUTCSeconds();\n    let timeFormat = \"\";\n\n    if (hores == 0 && minuts == 0) {\n        timeFormat = `${seg} s`;\n    } else if (hores == 0) {\n        timeFormat = `${minuts} m : ${seg} s`;\n    } else {\n        timeFormat = `${hores} h : ${minuts} m : ${seg} s`;\n    }\n\n    return timeFormat;\n}\n\nflow.set('timeOfCharge', timeCharge(startCharge, endCharge));\n\nreturn msg;",
         "outputs": 1,
@@ -1729,9 +1729,9 @@
         ]
     },
     {
-        "id": "caa18d950874b3fc",
+        "id": "2f0ee30d5ef9cfed",
         "type": "comment",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Resum càrrega",
         "info": "",
         "x": 660,
@@ -1739,9 +1739,9 @@
         "wires": []
     },
     {
-        "id": "17c50ef210388a36",
+        "id": "518c9df482add933",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "states",
         "func": "flow.set(\"oldState\", \"driving\");\nflow.set(\"currentState\", \"online\");\nflow.set(\"startCharge\", 0);\nflow.set(\"endCharge\", 0);\nflow.set('fase', \"\")\nflow.set('typeCharge', 0);\nlet lastsixMessages;\nflow.set(\"lastsixMessages\", lastsixMessages);",
         "outputs": 1,
@@ -1756,11 +1756,11 @@
         ]
     },
     {
-        "id": "a1f018ddb8530190",
+        "id": "c47a1d5ab0d0db4e",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Save orders",
-        "func": "let start = flow.get(\"dades_start\") || [];\nlet end = flow.get(\"dades_end\") || [];\nlet currentState = flow.get(\"currentState\");\nlet oldState = flow.get(\"oldState\");\nlet km = end[5] - start[5];\n\n\nif (oldState == \"driving\" && km >= 25) {\n    msg.payload = {}\n    msg.payload.content = 'autosave_travel';\n    return msg;\n} else if (currentState == \"charging\") {\n    msg.payload = {}\n    msg.payload.content = 'autosave_charge';\n    return msg;\n} else if (oldState == \"charging\") {\n    msg.payload = {}\n    msg.payload.content = 'autosave_recharge';\n    return msg;\n} else if (currentState == \"asleep\") {\n    msg.payload = {}\n    msg.payload.content = 'autosave_global';\n    return msg;\n}\n\n\nreturn null;",
+        "func": "let start = flow.get(\"dades_start\") || [];\nlet end = flow.get(\"dades_end\") || [];\nlet currentState = flow.get(\"currentState\");\nlet oldState = flow.get(\"oldState\");\nlet km = end[5] - start[5];\n\n\nif (oldState == \"driving\" && km >= flow.get(\"travelDist\") && flow.get(\"summaryTravel\") == \"Yes\") {\n    msg.payload = {}\n    msg.payload.content = 'autosave_travel';\n    return msg;\n} else if (currentState == \"charging\") {\n    msg.payload = {}\n    msg.payload.content = 'autosave_charge';\n    return msg;\n} else if (oldState == \"charging\" && flow.get(\"charge_energy_added\") > flow.get(\"chargeEnergy\") && flow.get(\"sumaryCharge\") == \"Yes\") {\n    msg.payload = {}\n    msg.payload.content = 'autosave_recharge';\n    return msg;\n} else if (currentState == \"asleep\" && flow.get(\"sumarySleep\") == \"Yes\") {\n    msg.payload = {}\n    msg.payload.content = 'autosave_global';\n    return msg;\n}\n\n\nreturn null;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1770,14 +1770,14 @@
         "y": 1920,
         "wires": [
             [
-                "b4081cc858c9c654"
+                "e50db9720f68069b"
             ]
         ]
     },
     {
-        "id": "958755ae3f6826ed",
+        "id": "83667488481560b6",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "save recharge",
         "func": "let sumaryCharge = flow.get(\"rechargeSumary\");\nlet dia = new Date().toLocaleDateString();\nlet hora = new Date().toLocaleTimeString('es-ES', { timeZone: 'Europe/Madrid', hour12: false, hour: '2-digit', minute: '2-digit' });\n\nlet split = sumaryCharge.split(\"càrrega:\")[1].split(\"            \");\nmsg.topic = `*** <a href=\"http://192.168.1.139:3000/d/BHhxFeZRz/charge-details?from=${flow.get('startDateCharge')}&to=${flow.get('endDateCharge')}&var-car_id=1&var-drive_id=${flow.get('idCharge')}&orgId=1\">Càrrega del ${dia} ${hora}</a> ***\n\n${split[2]}${split[3]}${split[4]}${split[5]}${split[6]}${split[7]}${split[8]}`;\n\nreturn msg;",
         "outputs": 1,
@@ -1789,30 +1789,30 @@
         "y": 1980,
         "wires": [
             [
-                "d2a610da19c666d4",
-                "6fe05f84e5ea0c1b",
-                "d4c1953104e80b3e"
+                "b20ef36712e1cbb7",
+                "3ed8bad796546bc9",
+                "58646a670b16b84f"
             ]
         ]
     },
     {
-        "id": "2f5d7807a327af8e",
+        "id": "256bab6b1a88bfb9",
         "type": "link out",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "state",
         "mode": "link",
         "links": [
-            "0e7c6c5a68a5c486",
-            "ff42f8e6ba816ceb"
+            "412a3fc6f3756b3d",
+            "80129abf44e430bd"
         ],
         "x": 435,
         "y": 320,
         "wires": []
     },
     {
-        "id": "574022d592e40ccd",
+        "id": "87860e312bb654fd",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Vampire Drain",
         "func": "let battery = flow.get('battery_level');\nlet end = flow.get(\"dades_end\") || [];\n\nif (flow.get('state') == 'online') {\n    let vampireDrain = end[6] - battery\n    if(vampireDrain > 0){\n        flow.set(\"vampireDrain\", vampireDrain);\n    }\n} else {\n    flow.set(\"vampireDrain\", 0);\n}",
         "outputs": 1,
@@ -1827,9 +1827,9 @@
         ]
     },
     {
-        "id": "2b31f917f81c0d8c",
+        "id": "4388808366fb4c6d",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "save global summary",
         "func": "/* temporarly disable */\n//return;\n\n\nlet bat = '';\nlet geo = '';\nlet state = '';\nlet km = '';\nlet kmBat = flow.get('odometer') - flow.get('kmCharge');\nlet inside_temp = flow.get('inside_temp');\nlet outside_temp = flow.get('outside_temp');\nlet battery_level = flow.get('battery_level');\nlet usable_battery_level = flow.get('usable_battery_level');\nlet vampire = flow.get(\"vampireDrain\");\nlet geofence = flow.get('geofence');\nlet latitude = flow.get('latitude');\nlet longitude = flow.get('longitude');\nlet last_status_change = new Date(flow.get('since'));\nlet sentry_mode = '';\nlet dades_end = flow.get(\"dades_end\") || [];\nlet dia = new Date().toLocaleDateString();\nlet hora = new Date().toLocaleTimeString('es-ES', { timeZone: 'Europe/Madrid', hour12: false, hour: '2-digit', minute: '2-digit' });\nlet adresa = dades_end[4];\n\nfunction calc_difference() {\n  let diffInMilliSeconds = Math.abs(new Date().getTime() - new Date(flow.get('since')).getTime()) / 1000;\n\n  // calculate days\n  const days = Math.floor(diffInMilliSeconds / 86400);\n  diffInMilliSeconds -= days * 86400;\n\n  // calculate hours\n  const hours = Math.floor(diffInMilliSeconds / 3600) % 24;\n  diffInMilliSeconds -= hours * 3600;\n\n  // calculate minutes\n  const minutes = Math.floor(diffInMilliSeconds / 60) % 60;\n  diffInMilliSeconds -= minutes * 60;\n\n  let difference = '';\n  if (days > 0) {\n    difference += `${days}d `;\n  }\n  if (hours > 0) {\n    difference += `${hours}h `;\n  }\n\n  difference += `${minutes}m`;\n\n  return difference;\n\n}\n\nfunction toFloat(num, precision) {\n  return parseFloat(num).toFixed(precision);\n}\n\n/**\n* @param {number} percent\n*/\nfunction getBatteryIcon(percent) {\n  let ico = `🔋 `;\n  if (percent <= 40) {\n    ico = `🪫 `;\n  }\n  return ico;\n}\n\nswitch (flow.get('state')) {\n  case \"online\":\n    state = 'Despert'\n    break;\n  case \"asleep\":\n    state = `Dormit fa ${calc_difference()}`\n    break;\n  case \"suspended\":\n    state = `Dormint-se des de fa ${calc_difference()}`\n    break;\n  case \"charging\":\n    state = 'Carregant'\n    break;\n  case \"offline\":\n    state = 'Desconectat'\n    break;\n  case \"start\":\n    state = 'Arrancant'\n    break;\n  case \"driving\":\n    state = 'Conduïnt'\n    break;\n  default:\n    state = 'Desconegut'\n}\n\nbat = getBatteryIcon(usable_battery_level);\nif (usable_battery_level !== battery_level) {\n  if (vampire > 0) {\n    bat += ` Usable ${usable_battery_level}% (disp. ${battery_level}%) - ${flow.get('rated_battery_range_km')} km\n    🦇 Consum vampíric ${vampire}%`;\n  } else {\n    bat += ` Usable ${usable_battery_level}% (disp. ${battery_level}%) - ${flow.get('rated_battery_range_km')} km`;\n  }\n} else {\n  if (vampire > 0) {\n    bat += ` Disponible ${usable_battery_level}% - ${flow.get('rated_battery_range_km')} km\n    🦇 Consum vampíric ${vampire}%`;\n  } else {\n    bat += ` Disponible ${usable_battery_level}% - ${flow.get('rated_battery_range_km')} km`;\n  }\n}\n\nif (kmBat > 0) {\n  km = `⚙️  ${Intl.NumberFormat('es-ES').format(parseInt(flow.get('odometer')))} km\n          ${kmBat.toFixed(2)} km des de l'última càrrega`\n} else {\n  km = `⚙️  ${Intl.NumberFormat('es-ES').format(parseInt(flow.get('odometer')))} km`\n}\n\nif (geofence !== \"\" && geofence !== undefined) {\n  geo = `Està a <a href=\"https://maps.google.com/maps?q=${latitude},${longitude}\">${geofence}</a>`;\n} else {\n  geo = `Està a <a href=\"https://maps.google.com/maps?q=${latitude},${longitude}\">${adresa}</a>`;\n}\n\nif (flow.get('sentry_mode') === \"true\") {\n  sentry_mode = `🟢  Sentinella activat`;\n} else {\n  sentry_mode = `⚫️  Sentinella desactivat`;\n}\n\nmsg.topic = `*** Resum general ${dia} ${hora} ***\n\n    💿  <a href=\"https://www.notateslaapp.com/software-updates/version/${flow.get('version')}/release-notes\">${flow.get('version')}</a> ${(flow.get('update_available') === 'true') ? `(disponible <a href=\"https://www.notateslaapp.com/software-updates/version/${flow.get('update_version')}/release-notes\"><i>${flow.get('update_version')}</i></a>)` : ''}\n    🚗  ${state}\n    ${km}\n    🔐  ${(flow.get('locked') === \"true\") ? 'Tancat' : 'Obert'}\n    ${bat}\n    🛞  Pressió de les rodes:\n              ${toFloat(flow.get('tpms_pressure_fl'), 3)} --- ${toFloat(flow.get('tpms_pressure_fr'), 3)}\n              ${toFloat(flow.get('tpms_pressure_rl'), 3)} --- ${toFloat(flow.get('tpms_pressure_rr'), 3)}\n    🌡️  Interior ${inside_temp}ºC\n    🌡️  Exterior ${outside_temp}ºC\n    🌎  ${geo}\n    ${sentry_mode}\n`;\n\nreturn msg;",
         "outputs": 1,
@@ -1841,16 +1841,16 @@
         "y": 1860,
         "wires": [
             [
-                "d2a610da19c666d4",
-                "f94521ae8226c04e",
-                "d4c1953104e80b3e"
+                "b20ef36712e1cbb7",
+                "249c9aab37718178",
+                "58646a670b16b84f"
             ]
         ]
     },
     {
-        "id": "7c721a6520c6ae9d",
+        "id": "0ade2685d9a8447a",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "recharge summary",
         "func": "/* temporarly disable */\n//return;\n\nlet state = flow.get(\"state\");\nlet bat = '';\nlet battery_level = flow.get('battery_level');\nlet usable_battery_level = flow.get('usable_battery_level');\nlet energyAdd = flow.get(\"charge_energy_added\");\nlet energyUsed = flow.get(\"energyUsed\");\nlet efficiency = (energyAdd * 100 / energyUsed).toFixed(2);\nlet timeOfCharge = flow.get('timeOfCharge')\nlet maxPower = flow.get('maxPower');\nlet avgPower = flow.get('avgPower');\nlet start_soc = flow.get(\"startCBL\");;\nlet end_soc = flow.get(\"endCBL\");\nlet textTypeCharge = \"\";\n\nif (usable_battery_level !== battery_level) {\n    bat = `Bateria usable ${usable_battery_level}% (<i>${battery_level}%</i>) - ${flow.get('rated_battery_range_km')}km`;\n} else {\n    bat = `Bateria disponible ${usable_battery_level}% - ${flow.get('rated_battery_range_km')}km`;\n}\n\nif (state === \"charging\") {\n    // Remaining\n    let time_to_full = flow.get(\"time_to_full_charge\");\n    let remaining = time_to_full.split('.');\n    let minutes = Math.ceil(60 * Number(\".\" + remaining[1]));\n    let total_minutes = (remaining[0] * 60) + minutes;\n    let finish_date = Date.now() + (total_minutes * 60000);\n    let new_date = new Date(finish_date);\n    let str_new_date = new_date.toLocaleTimeString('es-ES', { timeZone: 'Europe/Madrid', hour12: false, hour: '2-digit', minute: '2-digit' });\n    let start_date = new Date(flow.get('startCharge')).toLocaleTimeString('es-ES', { timeZone: 'Europe/Madrid', hour12: false, hour: '2-digit', minute: '2-digit' });\n\n    let how_long = \"\";\n    if (remaining[0] > 0) {\n        how_long = `${remaining[0]}h ${minutes}m`;\n    } else {\n        how_long = `${minutes}m`;\n    }\n\n    let voltage = \"\";\n    let amps = \"\";\n    let chargeType = '';\n    if (parseInt(flow.get(\"charger_voltage\")) === 2) {\n        chargeType = `DC`;\n        flow.set(\"typeCharge\", 2);\n    } else {\n        chargeType = `AC ${(flow.get(\"charger_phases\") === \"1\") ? 'monofàsica' : 'trifàsica'}`;\n        flow.set(\"typeCharge\", 1);\n\n        voltage = `⚡️ Voltatge: ${flow.get(\"charger_voltage\")}V`;\n        amps = `⚡️ Intensitat: ${flow.get(\"charger_actual_current\")}A`;\n    }\n\n    msg.topic = `*** Resum càrrega ***\n    \n        🔌  Cargant amb ${chargeType} a ${Math.abs(flow.get(\"power\"))}kW\n        🪫  ${bat}\n        ✅ Inici de càrrega a les ${start_date}\n        🔋  Límit de càrrega ${flow.get(\"charge_limit_soc\")}%\n        ⌛️  Temps per finalitzar càrrega: ${how_long} \n        ⏱  Hora de finalització càrrega: ${str_new_date}\n    `;\n\n    if (parseInt(flow.get(\"charger_voltage\")) !== 2) {\n        msg.topic += `    ${voltage}\n        ${amps}\n        🔋 ${energyAdd}kWh afegits\n        `;\n    } else {\n        msg.topic += `    🔋 ${energyAdd}kWh afegits\n        `;\n    }\n\n} else {\n\n    let typeCharge = flow.get(\"typeCharge\");\n    if (typeCharge === 1) {\n        if (flow.get(\"fases\") === \"1\") {\n            textTypeCharge = \"AC monofàsica\";\n        } else {\n            textTypeCharge = \"AC trifàsica\";\n        }\n    } else if (typeCharge === 2) {\n        textTypeCharge = \"DC\";\n    }\n\n    msg.topic = `*** Resum càrrega ***\n    \n        🪫 ${bat}\n        🔋 Límit de càrrega ${flow.get(\"charge_limit_soc\")}%\n        🔌 Cable ${(flow.get(\"plugged_in\") === \"true\") ? \"connectat\" : \"no connectat\"}\n        🔋 Última càrrega:\n                \n            📈  Carregat del <b>${start_soc}%</b> al <b>${end_soc}%</b>\n            ⚡️  Afegits <b>${energyAdd} kWh</b> \n                  Usats <b>${energyUsed} kWh</b> \n                  Eficiencia <b>${efficiency} %</b> \n            🔌  Afegits amb <b>${textTypeCharge} </b>\n            ⌛️  <b>${timeOfCharge}</b> \n            🦾  <b>${Math.round(avgPower)} kW</b> (max: <b>${Math.round(maxPower)} kW</b>)\n        \n    `;\n    flow.set(\"rechargeSumary\", msg.topic);\n}\n\n\n\nreturn msg;",
         "outputs": 1,
@@ -1865,9 +1865,9 @@
         ]
     },
     {
-        "id": "33d41549a242c3f6",
+        "id": "7ebaf24052ba4529",
         "type": "comment",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Bot autosave messages",
         "info": "",
         "x": 120,
@@ -1875,9 +1875,9 @@
         "wires": []
     },
     {
-        "id": "03136f3eefe5e75b",
+        "id": "f288aa8d393a412d",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Altitude",
         "func": "let altitude = flow.get('altitude') || [];\nlet elevation = flow.get('elevation');\n\nswitch (flow.get('state')) {\n    case \"driving\":\n        altitude.push(elevation);\n        flow.set('altitude', altitude);\n        break;\n}\n\n",
         "outputs": 1,
@@ -1892,9 +1892,9 @@
         ]
     },
     {
-        "id": "d4c1953104e80b3e",
+        "id": "58646a670b16b84f",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Get last message ID",
         "func": "let token = flow.get('telegram_token');\nlet chat_id = flow.get('telegram_chatId');\nlet message_id = flow.get(\"saveMessage\")+1;\nlet multimessage = flow.get('multiMessage');\n\nif (multimessage !== message_id){\n    var url = `https://api.telegram.org/bot${token}/deleteMessage?chat_id=${chat_id}&message_id=${multimessage}`\n    msg.url = url;\n    return msg;\n}else{\n    var url = `https://api.telegram.org/bot${token}/deleteMessage?chat_id=${chat_id}&message_id=${message_id}`\n    msg.url = url;\n    return msg;\n}\n\n\n",
         "outputs": 1,
@@ -1906,14 +1906,14 @@
         "y": 1980,
         "wires": [
             [
-                "801918cd6dd4c436"
+                "5269f6792ff606f4"
             ]
         ]
     },
     {
-        "id": "801918cd6dd4c436",
+        "id": "5269f6792ff606f4",
         "type": "http request",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "HTTP Request (POST)",
         "method": "POST",
         "ret": "txt",
@@ -1933,9 +1933,9 @@
         ]
     },
     {
-        "id": "48d51d59473b57ba",
+        "id": "b816b07e78814e27",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "save_travel",
         "func": "let start = flow.get(\"dades_start\") || [];\nlet end = flow.get(\"dades_end\") || [];\nlet diaSortida = new Date(start[0] * 1000).toLocaleDateString();\nlet hSortida = new Date(start[0] * 1000).toLocaleTimeString('es-ES', { timeZone: 'Europe/Madrid', hour12: false, hour: '2-digit', minute: '2-digit' });\nlet hArribada = (end[0] !== undefined) ? `(${new Date(end[0] * 1000).toLocaleTimeString('es-ES', { timeZone: 'Europe/Madrid', hour12: false, hour: '2-digit', minute: '2-digit' })}):</b>` : \":</b>\"\nlet geo = '';\nlet geofence = flow.get('geofence');\nlet latitude = flow.get('latitude');\nlet longitude = flow.get('longitude');\nlet max_speed = flow.get('max_speed');\nlet avg_speed = flow.get('avg_speed').toFixed(0);\nlet vel = flow.get('vel') || [];\nlet max_temp = flow.get('maxTemp').toFixed(1);\nlet min_temp = flow.get('minTemp').toFixed(1);\nlet avg_temp = flow.get('avgTemp').toFixed(1);\nlet altitude = flow.get('altitude') || [];\nlet maxIn_temp = flow.get('maxInTemp').toFixed(1);\nlet minIn_temp = flow.get('minInTemp').toFixed(1);\nlet avgIn_temp = flow.get('avgInTemp').toFixed(1);\nlet onclimate = flow.get('onclimate');\nlet offclimate = flow.get('offclimate');\nlet climatetime = flow.get('climatetime');\nlet energyTravel = flow.get(\"energyTravel\");\n\nfunction site(geofence, latitude, longitude, adres) {\n    if (adres == undefined) {\n        return \"En camí\"\n    } else {\n        if (geofence !== \"\" && geofence !== undefined) {\n            return `<a href=\"https://maps.google.com/maps?q=${latitude},${longitude}\">${geofence}</a>`;\n        } else {\n            return `<a href=\"https://maps.google.com/maps?q=${latitude},${longitude}\">${adres}</a>`;\n        }\n    }\n}\n\nfunction kilometers(km_inici, km_final) {\n    if (km_final == undefined) {\n        let kmactual = flow.get('odometer');\n        return (kmactual - km_inici).toFixed(2)\n    } else {\n        return (km_final - km_inici).toFixed(2)\n    }\n}\n\nfunction diftemps(temp_final, temp_inici) {\n    if (temp_final !== undefined) {\n        var timeDifference = temp_final - temp_inici;\n        var differenceDate = new Date(timeDifference * 1000);\n        var diffHours = differenceDate.getUTCHours();\n        var diffMinutes = differenceDate.getUTCMinutes();\n        var diffSeconds = differenceDate.getUTCSeconds();\n\n        if (diffMinutes == 0) {\n            return diffSeconds + ' s';\n\n        } else if (diffHours == 0) {\n            return diffMinutes + ' m : ' + diffSeconds + ' s';\n        } else {\n            return diffHours + ' h : ' + diffMinutes + ' m : ' + diffSeconds + ' s';\n        }\n    } else {\n        let tempnow = Math.round(Date.now() / 1000);\n        var timeDifference = tempnow - temp_inici;\n        var differenceDate = new Date(timeDifference * 1000);\n        var diffHours = differenceDate.getUTCHours();\n        var diffMinutes = differenceDate.getUTCMinutes();\n        var diffSeconds = differenceDate.getUTCSeconds();\n\n        if (diffMinutes == 0) {\n            return diffSeconds + ' s';\n\n        } else if (diffHours == 0) {\n            return diffMinutes + ' m : ' + diffSeconds + ' s';\n        } else {\n            return diffHours + ' h : ' + diffMinutes + ' m : ' + diffSeconds + ' s';\n        }\n    }\n\n}\n\nfunction mode(arr) {\n    const mode = {};\n    let max = 0, count = 0;\n\n    for (let i = 0; i < arr.length; i++) {\n        const item = arr[i];\n\n        if (mode[item]) {\n            mode[item]++;\n        } else {\n            mode[item] = 1;\n        }\n\n        if (count < mode[item]) {\n            max = item;\n            count = mode[item];\n        }\n    }\n\n    return max;\n};\n\nfunction climateuse(starttimetravel, endtimetravel, timeAc, onclima) {\n    let hores_ac = 0;\n    let minuts_ac = 0;\n    let seg_ac = 0;\n\n    let hores_v = 0;\n    let minuts_v = 0;\n    let seg_v = 0;\n\n    if (timeAc == 0 && onclima == 0) {\n        return \"A/C: Apagat\"\n    } else if (timeAc > 0 && onclima > 0) {\n\n        let time = Date.now();\n        let diftime = timeAc + (time - onclima);\n        let lasttime = new Date(diftime);\n        hores_ac += lasttime.getUTCHours();\n        minuts_ac += lasttime.getUTCMinutes();\n        seg_ac += lasttime.getUTCSeconds();\n\n    } else if (onclima > 0) {\n\n        let time3 = Date.now();\n        let diftime = time3 - onclima;\n        let lasttime = new Date(diftime);\n        hores_ac += lasttime.getUTCHours();\n        minuts_ac += lasttime.getUTCMinutes();\n        seg_ac += lasttime.getUTCSeconds();\n\n    } else if (timeAc > 0) {\n\n        let time = new Date(timeAc);\n        hores_ac += time.getUTCHours();\n        minuts_ac += time.getUTCMinutes();\n        seg_ac += time.getUTCSeconds();\n    }\n\n    if (endtimetravel !== undefined) {\n        var timeDifference = endtimetravel - starttimetravel;\n        var differenceDate = new Date(timeDifference * 1000);\n        hores_v = differenceDate.getUTCHours();\n        minuts_v = differenceDate.getUTCMinutes();\n        seg_v = differenceDate.getUTCSeconds();\n    } else {\n        let tempnow = Math.round(Date.now() / 1000);\n        var timeDifference = tempnow - starttimetravel;\n        var differenceDate = new Date(timeDifference * 1000);\n        hores_v = differenceDate.getUTCHours();\n        minuts_v = differenceDate.getUTCMinutes();\n        seg_v = differenceDate.getUTCSeconds();\n    }\n\n    let htm = hores_ac * 60;\n    let stm = seg_ac / 60;\n    let totalmin = minuts_ac + htm + stm;\n    let htm_v = hores_v * 60;\n    let stm_v = seg_v / 60;\n    let totalmin_v = minuts_v + htm_v + stm_v;\n    let useAC = Math.round(totalmin * 100 / totalmin_v);\n\n    if (hores_ac == 0 && minuts_ac == 0) {\n        return `A/C: ${seg_ac} s (${useAC}%)`\n    } else if (hores_ac == 0) {\n        return `A/C: ${minuts_ac} m : ${seg_ac} s (${useAC}%)`\n    } else {\n        return `A/C: ${hores_ac} h : ${minuts_ac} m : ${seg_ac} s (${useAC}%)`\n    }\n}\n\nfunction battery(end_lvl, start_lvl, energyUsed, km_inici, km_final) {\n    if (end_lvl == undefined) {\n        let lvl_now = flow.get('battery_level');\n        return `Inicial: ${start_lvl}% \n                Actual: ${lvl_now}%  \n                Utilitzada: ${(lvl_now - start_lvl) * -1}% `\n    } else {\n        if (energyUsed != -100) {\n            let consum = (energyUsed / (km_final - km_inici) * 1000).toFixed(0);\n            return `Inicial: ${start_lvl}% \n                Final: ${end_lvl}% \n                Utilitzada: ${(end_lvl - start_lvl) * -1}%\n                Energia usada: ${energyUsed} kWh\n                Consum: ${consum} Wh/km`\n        } else {\n            return `Inicial: ${start_lvl}% \n                Final: ${end_lvl}% \n                Utilitzada: ${(end_lvl - start_lvl) * -1}%`\n        }\n    }\n}\n\nfunction desnivell(array) {\n    var desnivell_positiu = 0;\n    var desnivell_negatiu = 0;\n\n    for (var i = 1; i < array.length; i++) {\n        var diferencial = array[i] - array[i - 1];\n        if (diferencial > 0) {\n            desnivell_positiu += diferencial;\n        }\n        else {\n            desnivell_negatiu -= diferencial;\n        }\n    }\n    return `Positiu: ${desnivell_positiu} m\n                Negatiu: ${desnivell_negatiu * -1} m\n                Acumulat: ${desnivell_positiu + desnivell_negatiu} m`\n}\n\nmsg.topic = `*** <a href=\"http://192.168.1.139:3000/d/zm7wN6Zgz/drive-details?from=${flow.get('startDateDrive')}&to=${flow.get('endDateDrive')}&var-car_id=1&var-drive_id=${flow.get('idDrive')}&orgId=1\">Resum últim viatge ${diaSortida}</a> ***\n\n    ➡️  <b>Sordida (${hSortida}): </b>\n                ${site(start[1], start[2], start[3], start[4])}\n    🔚  <b>Arribada ${hArribada}\n                ${site(end[1], end[2], end[3], end[4])}\n    🛣️  <b>km:</b> \n                ${kilometers(start[5], end[5])} km\n    ⏱️  <b>Temps:</b> \n                ${diftemps(end[0], start[0])}\n    🏎️  <b>Velocitat:</b>\n                Mitja: ${avg_speed} km/h\n                Màxima: ${max_speed} km/h  \n                Moda: ${mode(vel)} km/h       \n    🔋  <b>Bateria:</b>\n                ${battery(end[6], start[6], energyTravel, start[5], end[5])}\n    🏔  <b>Desnivell:</b>\n                ${desnivell(altitude)}\n    🌡️ <b>Temperatura:</b>\n                             <u><i>Exterior</i>           <i>Interior</i>  </u>\n                <u><i>Màxima</i>     ${max_temp} °C           ${maxIn_temp} °C</u>\n                <u><i>Mínima</i>      ${min_temp} °C           ${minIn_temp} °C</u>\n                <u><i>Mitja</i>         ${avg_temp} °C           ${avgIn_temp} °C</u>\n                ${climateuse(start[0], end[0], climatetime, onclimate)}\n        `;\n\nmsg.payload.content = 'viatge';\n\nreturn msg;",
         "outputs": 1,
@@ -1947,16 +1947,16 @@
         "y": 1900,
         "wires": [
             [
-                "d2a610da19c666d4",
-                "82549213e820f7f2",
-                "d4c1953104e80b3e"
+                "b20ef36712e1cbb7",
+                "e6af917bd52c5f6e",
+                "58646a670b16b84f"
             ]
         ]
     },
     {
-        "id": "b4081cc858c9c654",
+        "id": "e50db9720f68069b",
         "type": "switch",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "property": "payload.content",
         "propertyType": "msg",
@@ -1994,29 +1994,29 @@
         "y": 1880,
         "wires": [
             [
-                "2b31f917f81c0d8c"
+                "4388808366fb4c6d"
             ],
             [
-                "a0c939cd03c98607"
+                "74ea29453876e305"
             ],
             [
-                "7c721a6520c6ae9d"
+                "0ade2685d9a8447a"
             ],
             [
-                "a4e9d5332f096a5a",
-                "305acf49a3ab1357",
-                "7c721a6520c6ae9d",
-                "07065bb9d7ca5501"
+                "e602b0ca7b87d5eb",
+                "99e544a343cc07a4",
+                "0ade2685d9a8447a",
+                "10730882fb2615c5"
             ],
             [
-                "64c90d263adeabf3"
+                "5a1ab7076f7512cc"
             ]
         ]
     },
     {
-        "id": "f94521ae8226c04e",
+        "id": "249c9aab37718178",
         "type": "delay",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "pauseType": "delay",
         "timeout": "0.1",
@@ -2034,14 +2034,14 @@
         "y": 1680,
         "wires": [
             [
-                "536bf612679ffcb1"
+                "51064b9cf8d2282d"
             ]
         ]
     },
     {
-        "id": "82549213e820f7f2",
+        "id": "e6af917bd52c5f6e",
         "type": "delay",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "pauseType": "delay",
         "timeout": "0.1",
@@ -2059,14 +2059,14 @@
         "y": 1720,
         "wires": [
             [
-                "a0bf019d11dc2c67"
+                "45647267c8098989"
             ]
         ]
     },
     {
-        "id": "6fe05f84e5ea0c1b",
+        "id": "3ed8bad796546bc9",
         "type": "delay",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "pauseType": "delay",
         "timeout": "0.1",
@@ -2084,14 +2084,14 @@
         "y": 1760,
         "wires": [
             [
-                "37ef089b3c099485"
+                "2e2d74be504855a8"
             ]
         ]
     },
     {
-        "id": "03321c15999c6456",
+        "id": "6d920fc452126a42",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "save multi messageId",
         "func": "\nflow.set('multiMessage', msg.payload.content.message_id);",
         "outputs": 1,
@@ -2106,9 +2106,9 @@
         ]
     },
     {
-        "id": "dc1884633f53bdd6",
+        "id": "5e7ac4331ed2b24a",
         "type": "inject",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "props": [],
         "repeat": "2",
@@ -2120,14 +2120,14 @@
         "y": 840,
         "wires": [
             [
-                "03136f3eefe5e75b"
+                "f288aa8d393a412d"
             ]
         ]
     },
     {
-        "id": "c7ca7fe89fdcb639",
+        "id": "e0b03872a1ea28d7",
         "type": "delay",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "pauseType": "delay",
         "timeout": "0.2",
@@ -2145,15 +2145,15 @@
         "y": 1880,
         "wires": [
             [
-                "a1f018ddb8530190",
-                "c2062e98e9d5e741"
+                "c47a1d5ab0d0db4e",
+                "b07467a728c8f3d5"
             ]
         ]
     },
     {
-        "id": "536bf612679ffcb1",
+        "id": "51064b9cf8d2282d",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "global summary",
         "func": "/* temporarly disable */\n//return;\n\n\nlet bat = '';\nlet geo = '';\nlet state = '';\nlet km = '';\nlet kmBat = flow.get('odometer') - flow.get('kmCharge');\nlet inside_temp = flow.get('inside_temp');\nlet outside_temp = flow.get('outside_temp');\nlet battery_level = flow.get('battery_level');\nlet usable_battery_level = flow.get('usable_battery_level');\nlet vampire = flow.get(\"vampireDrain\");\nlet geofence = flow.get('geofence');\nlet latitude = flow.get('latitude');\nlet longitude = flow.get('longitude');\nlet last_status_change = new Date(flow.get('since'));\nlet sentry_mode = '';\nlet dades_end = flow.get(\"dades_end\") || [];\nlet dia = new Date().toLocaleDateString();\nlet hora = new Date().toLocaleTimeString('es-ES', { timeZone: 'Europe/Madrid', hour12: false, hour: '2-digit', minute: '2-digit' });\nlet adresa = dades_end[4];\n\nfunction calc_difference() {\n  let diffInMilliSeconds = Math.abs(new Date().getTime() - new Date(flow.get('since')).getTime()) / 1000;\n\n  // calculate days\n  const days = Math.floor(diffInMilliSeconds / 86400);\n  diffInMilliSeconds -= days * 86400;\n\n  // calculate hours\n  const hours = Math.floor(diffInMilliSeconds / 3600) % 24;\n  diffInMilliSeconds -= hours * 3600;\n\n  // calculate minutes\n  const minutes = Math.floor(diffInMilliSeconds / 60) % 60;\n  diffInMilliSeconds -= minutes * 60;\n\n  let difference = '';\n  if (days > 0) {\n    difference += `${days}d `;\n  }\n  if (hours > 0) {\n    difference += `${hours}h `;\n  }\n\n  difference += `${minutes}m`;\n\n  return difference;\n\n}\n\nfunction toFloat(num, precision) {\n  return parseFloat(num).toFixed(precision);\n}\n\n/**\n* @param {number} percent\n*/\nfunction getBatteryIcon(percent) {\n  let ico = `🔋 `;\n  if (percent <= 40) {\n    ico = `🪫 `;\n  }\n  return ico;\n}\n\nswitch (flow.get('state')) {\n  case \"online\":\n    state = 'Despert'\n    break;\n  case \"asleep\":\n    state = `Dormit fa ${calc_difference()}`\n    break;\n  case \"suspended\":\n    state = `Dormint-se des de fa ${calc_difference()}`\n    break;\n  case \"charging\":\n    state = 'Carregant'\n    break;\n  case \"offline\":\n    state = 'Desconectat'\n    break;\n  case \"start\":\n    state = 'Arrancant'\n    break;\n  case \"driving\":\n    state = 'Conduïnt'\n    break;\n  case \"updating\":\n    state = `Actualitzant durant ${calc_difference()}`;\n    break;\n  default:\n    state = 'Desconegut'\n}\n\nbat = getBatteryIcon(usable_battery_level);\nif (usable_battery_level !== battery_level) {\n  if (vampire > 0) {\n    bat += ` Usable ${usable_battery_level}% (disp. ${battery_level}%) - ${flow.get('rated_battery_range_km')} km\n    🦇 Consum vampíric ${vampire}%`;\n  } else {\n    bat += ` Usable ${usable_battery_level}% (disp. ${battery_level}%) - ${flow.get('rated_battery_range_km')} km`;\n  }\n} else {\n  if (vampire > 0) {\n    bat += ` Disponible ${usable_battery_level}% - ${flow.get('rated_battery_range_km')} km\n    🦇 Consum vampíric ${vampire}%`;\n  } else {\n    bat += ` Disponible ${usable_battery_level}% - ${flow.get('rated_battery_range_km')} km`;\n  }\n}\n\nif(kmBat > 0){\n  km = `⚙️  ${Intl.NumberFormat('es-ES').format(parseInt(flow.get('odometer')))} km\n          ${kmBat.toFixed(2)} km des de l'última càrrega`\n}else{\n  km = `⚙️  ${Intl.NumberFormat('es-ES').format(parseInt(flow.get('odometer')))} km`\n}\n\nif (geofence !== \"\" && geofence !== undefined) {\n  geo = `Està a <a href=\"https://maps.google.com/maps?q=${latitude},${longitude}\">${geofence}</a>`;\n} else {\n  geo = `Està a <a href=\"https://maps.google.com/maps?q=${latitude},${longitude}\">${adresa}</a>`;\n}\n\nif (flow.get('sentry_mode') === \"true\") {\n  sentry_mode = `🟢  Sentinella activat`;\n} else {\n  sentry_mode = `⚫️  Sentinella desactivat`;\n}\n\nmsg.topic = `*** Resum general ***\n\n    💿  <a href=\"https://www.notateslaapp.com/software-updates/version/${flow.get('version')}/release-notes\">${flow.get('version')}</a> ${(flow.get('update_available') === 'true') ? `(disponible <a href=\"https://www.notateslaapp.com/software-updates/version/${flow.get('update_version')}/release-notes\"><i>${flow.get('update_version')}</i></a>)` : ''}\n    🚗  ${state}\n    ${km}\n    🔐  ${(flow.get('locked') === \"true\") ? 'Tancat' : 'Obert'}\n    ${bat}\n    🛞  Pressió de les rodes:\n              ${toFloat(flow.get('tpms_pressure_fl'), 3)} --- ${toFloat(flow.get('tpms_pressure_fr'), 3)}\n              ${toFloat(flow.get('tpms_pressure_rl'), 3)} --- ${toFloat(flow.get('tpms_pressure_rr'), 3)}\n    🌡️  Interior ${inside_temp}ºC\n    🌡️  Exterior ${outside_temp}ºC\n    🌎  ${geo}\n    ${sentry_mode}\n`;\n\nreturn msg;",
         "outputs": 1,
@@ -2165,14 +2165,14 @@
         "y": 1360,
         "wires": [
             [
-                "0a068af0dd8e121d"
+                "1654e644c8b93a25"
             ]
         ]
     },
     {
-        "id": "a4e9d5332f096a5a",
+        "id": "e602b0ca7b87d5eb",
         "type": "delay",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "pauseType": "delay",
         "timeout": "0.3",
@@ -2190,14 +2190,14 @@
         "y": 1980,
         "wires": [
             [
-                "958755ae3f6826ed"
+                "83667488481560b6"
             ]
         ]
     },
     {
-        "id": "c12ebf2bc70c92b3",
+        "id": "2adc65149c72859b",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Get query for charge sumary",
         "func": "let oldState = flow.get(\"oldState\");\n\nif (oldState == \"charging\"){\n    return msg;\n}",
         "outputs": 1,
@@ -2209,17 +2209,17 @@
         "y": 1760,
         "wires": [
             [
-                "07065bb9d7ca5501",
-                "df0b743b563e9709",
-                "abba05339a96d542",
-                "b242b377b9390e98"
+                "10730882fb2615c5",
+                "fa3217298f31703f",
+                "d7f95f9faaa9ec97",
+                "8b1ce9554f02875e"
             ]
         ]
     },
     {
-        "id": "07065bb9d7ca5501",
+        "id": "10730882fb2615c5",
         "type": "postgresql",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Query energy used",
         "query": "SELECT charge_energy_used FROM public.charging_processes\nORDER BY id DESC\nLIMIT 1",
         "postgreSQLConfig": "07193cee98e5185b",
@@ -2230,14 +2230,14 @@
         "y": 1580,
         "wires": [
             [
-                "92c431a9ad58b865"
+                "fbd4331839086994"
             ]
         ]
     },
     {
-        "id": "92c431a9ad58b865",
+        "id": "fbd4331839086994",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "energy used",
         "func": "flow.set('energyUsed', msg.payload[0].charge_energy_used)\nreturn msg;",
         "outputs": 1,
@@ -2252,9 +2252,9 @@
         ]
     },
     {
-        "id": "07b013433c3a53a8",
+        "id": "fb38775ead07d376",
         "type": "postgresql",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Start date drive",
         "query": "SELECT start_date from public.drives \nORDER BY id DESC \nLIMIT 1;",
         "postgreSQLConfig": "07193cee98e5185b",
@@ -2265,14 +2265,14 @@
         "y": 1880,
         "wires": [
             [
-                "8b3ebbb8d6cba9cf"
+                "891f4d330506ad9c"
             ]
         ]
     },
     {
-        "id": "117b0513c00c8c14",
+        "id": "e099382168d82274",
         "type": "comment",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Querys",
         "info": "",
         "x": 1910,
@@ -2280,9 +2280,9 @@
         "wires": []
     },
     {
-        "id": "d02fe38a733b7f4a",
+        "id": "30b33bb33a6eec87",
         "type": "postgresql",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "End date drive",
         "query": "SELECT end_date from public.drives \nORDER BY id DESC \nLIMIT 1;",
         "postgreSQLConfig": "07193cee98e5185b",
@@ -2293,14 +2293,14 @@
         "y": 1940,
         "wires": [
             [
-                "e4069cdba74329b2"
+                "a4c2d56893583144"
             ]
         ]
     },
     {
-        "id": "1bf87a1cbb95c1b9",
+        "id": "16aec69e45c51382",
         "type": "postgresql",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "id last drive",
         "query": "SELECT id from public.drives \nORDER BY id DESC \nLIMIT 1;",
         "postgreSQLConfig": "07193cee98e5185b",
@@ -2311,14 +2311,14 @@
         "y": 1820,
         "wires": [
             [
-                "724c95f435e08756"
+                "5094111f3d64dae8"
             ]
         ]
     },
     {
-        "id": "724c95f435e08756",
+        "id": "5094111f3d64dae8",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "id drive",
         "func": "flow.set('idDrive', msg.payload[0].id);\nmsg.payload = msg.payload[0].id;\nreturn msg;",
         "outputs": 1,
@@ -2330,14 +2330,14 @@
         "y": 1820,
         "wires": [
             [
-                "642f70ff5f11ebc3"
+                "d378ddb4f843f832"
             ]
         ]
     },
     {
-        "id": "8b3ebbb8d6cba9cf",
+        "id": "891f4d330506ad9c",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "start date drive",
         "func": "flow.set('startDateDrive', msg.payload[0].start_date.getTime() + 7200000)\nreturn msg;",
         "outputs": 1,
@@ -2352,9 +2352,9 @@
         ]
     },
     {
-        "id": "e4069cdba74329b2",
+        "id": "a4c2d56893583144",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "end datedrive",
         "func": "flow.set('endDateDrive', msg.payload[0].end_date.getTime() + 7200000);\nreturn msg;",
         "outputs": 1,
@@ -2369,25 +2369,25 @@
         ]
     },
     {
-        "id": "ff42f8e6ba816ceb",
+        "id": "80129abf44e430bd",
         "type": "link in",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "link in 1",
         "links": [
-            "2f5d7807a327af8e"
+            "256bab6b1a88bfb9"
         ],
         "x": 1755,
         "y": 1820,
         "wires": [
             [
-                "919c1bb5c70900e2"
+                "062f9fa08c3528a7"
             ]
         ]
     },
     {
-        "id": "919c1bb5c70900e2",
+        "id": "062f9fa08c3528a7",
         "type": "delay",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "pauseType": "delay",
         "timeout": "0.1",
@@ -2405,15 +2405,15 @@
         "y": 1820,
         "wires": [
             [
-                "c12ebf2bc70c92b3",
-                "84edda7a9700f128"
+                "2adc65149c72859b",
+                "a86e65da08bed97e"
             ]
         ]
     },
     {
-        "id": "84edda7a9700f128",
+        "id": "a86e65da08bed97e",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Get query for travel sumary",
         "func": "let oldState = flow.get(\"oldState\");\n\nif (oldState == \"driving\"){\n    return msg;\n}",
         "outputs": 1,
@@ -2425,16 +2425,16 @@
         "y": 1880,
         "wires": [
             [
-                "1bf87a1cbb95c1b9",
-                "07b013433c3a53a8",
-                "d02fe38a733b7f4a"
+                "16aec69e45c51382",
+                "fb38775ead07d376",
+                "30b33bb33a6eec87"
             ]
         ]
     },
     {
-        "id": "abba05339a96d542",
+        "id": "d7f95f9faaa9ec97",
         "type": "postgresql",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "start Date charge",
         "query": "SELECT start_date FROM public.charging_processes\nORDER BY id DESC\nLIMIT 1",
         "postgreSQLConfig": "07193cee98e5185b",
@@ -2445,14 +2445,14 @@
         "y": 1700,
         "wires": [
             [
-                "1d77c1b82ffcd93e"
+                "4d6ad08e485b1069"
             ]
         ]
     },
     {
-        "id": "b242b377b9390e98",
+        "id": "8b1ce9554f02875e",
         "type": "postgresql",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "end Date Charge",
         "query": "SELECT end_date FROM public.charging_processes\nORDER BY id DESC\nLIMIT 1",
         "postgreSQLConfig": "07193cee98e5185b",
@@ -2463,14 +2463,14 @@
         "y": 1760,
         "wires": [
             [
-                "2c2dbec08df6ddfc"
+                "a2f6a1bf433bdfad"
             ]
         ]
     },
     {
-        "id": "df0b743b563e9709",
+        "id": "fa3217298f31703f",
         "type": "postgresql",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "id charge",
         "query": "SELECT id FROM public.charging_processes\nORDER BY id DESC\nLIMIT 1",
         "postgreSQLConfig": "07193cee98e5185b",
@@ -2481,14 +2481,14 @@
         "y": 1640,
         "wires": [
             [
-                "a6da20e1dd71e7e2"
+                "4d7d857a19774379"
             ]
         ]
     },
     {
-        "id": "a6da20e1dd71e7e2",
+        "id": "4d7d857a19774379",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "id charge",
         "func": "flow.set('idCharge', msg.payload[0].id)\nreturn msg;",
         "outputs": 1,
@@ -2503,9 +2503,9 @@
         ]
     },
     {
-        "id": "1d77c1b82ffcd93e",
+        "id": "4d6ad08e485b1069",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "start date charge",
         "func": "flow.set('startDateCharge', msg.payload[0].start_date.getTime() + 7200000)\nreturn msg;",
         "outputs": 1,
@@ -2520,9 +2520,9 @@
         ]
     },
     {
-        "id": "2c2dbec08df6ddfc",
+        "id": "a2f6a1bf433bdfad",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "end date charge",
         "func": "flow.set('endDateCharge', msg.payload[0].end_date.getTime() + 7200000)\nreturn msg;",
         "outputs": 1,
@@ -2537,9 +2537,9 @@
         ]
     },
     {
-        "id": "305acf49a3ab1357",
+        "id": "99e544a343cc07a4",
         "type": "delay",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "pauseType": "delay",
         "timeout": "0.3",
@@ -2557,14 +2557,14 @@
         "y": 1940,
         "wires": [
             [
-                "7c721a6520c6ae9d"
+                "0ade2685d9a8447a"
             ]
         ]
     },
     {
-        "id": "642f70ff5f11ebc3",
+        "id": "d378ddb4f843f832",
         "type": "postgresql",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Energy travel",
         "query": "SELECT (NULLIF(GREATEST(start_rated_range_km - end_rated_range_km, 0), 0) * car.efficiency)\nFROM public.drives d\nJOIN cars car ON car.id = car_id\nWHERE d.id = {{{msg.payload}}};",
         "postgreSQLConfig": "07193cee98e5185b",
@@ -2575,14 +2575,14 @@
         "y": 1820,
         "wires": [
             [
-                "84d66daf8983a507"
+                "06a31738090ac28a"
             ]
         ]
     },
     {
-        "id": "84d66daf8983a507",
+        "id": "06a31738090ac28a",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "energy travel",
         "func": "try{\n    flow.set('energyTravel', msg.payload[0][\"?column?\"].toFixed(2));\n}catch (err){\n    flow.set('energyTravel', -100); \n}\nmsg.payload = flow.get(\"energyTravel\");\nreturn msg;",
         "outputs": 1,
@@ -2597,9 +2597,9 @@
         ]
     },
     {
-        "id": "a0c939cd03c98607",
+        "id": "74ea29453876e305",
         "type": "delay",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "pauseType": "delay",
         "timeout": "1",
@@ -2617,14 +2617,14 @@
         "y": 1900,
         "wires": [
             [
-                "48d51d59473b57ba"
+                "b816b07e78814e27"
             ]
         ]
     },
     {
-        "id": "ae4529c01e9b0eab",
+        "id": "dfe523f0ac4f5270",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Last six travels",
         "func": "let start = flow.get(\"dades_start\") || [];\nlet end = flow.get(\"dades_end\") || [];\nlet diaSortida = new Date(start[0] * 1000).toLocaleDateString();\nvar lastsixMessages = flow.get(\"lastsixMessages\") || [];;\n\nfunction site(geofence, latitude, longitude, adres) {\n    if (adres == undefined) {\n        return \"En camí\"\n    } else {\n        if (geofence !== \"\" && geofence !== undefined) {\n            return `<a href=\"https://maps.google.com/maps?q=${latitude},${longitude}\">${geofence}</a>`;\n        } else {\n            return `<a href=\"https://maps.google.com/maps?q=${latitude},${longitude}\">${adres}</a>`;\n        }\n    }\n}\n\n// Esta función se ejecutará cada vez que llegue un nuevo mensaje desde Telegram\nfunction storeLastsixMessages(msg) {\n    // Crear un objeto que represente el mensaje actual\n    var messageObject = {\n        km: (end[5] - start[5]).toFixed(0),\n        content: msg.topic\n    };\n\n    // Agregar el nuevo objeto a la matriz\n    lastsixMessages.push(messageObject);\n\n    // Limitar el tamaño de la matriz a 5 elementos (los últimos 5 mensajes)\n    if (lastsixMessages.length > 6) {\n        lastsixMessages.shift(); // Eliminar el mensaje más antiguo (el primero de la matriz)\n    }\n}\n\nstoreLastsixMessages(msg)\n\n\n// Enviar la matriz actualizada a través del flujo de salida\nmsg.payload = lastsixMessages;\n\nflow.set(\"lastsixMessages\", lastsixMessages);\nreturn msg;\n",
         "outputs": 1,
@@ -2639,9 +2639,9 @@
         ]
     },
     {
-        "id": "ee928702fa52a36a",
+        "id": "23a8738833246d23",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Selecció últims 6",
         "func": "\nmsg.topic = `<b>ÚLTIMS SIS VIATGES</b>`;\n    \nmsg.payload.content = 'sis';\n\nreturn msg;",
         "outputs": 1,
@@ -2653,14 +2653,14 @@
         "y": 1500,
         "wires": [
             [
-                "0a068af0dd8e121d"
+                "1654e644c8b93a25"
             ]
         ]
     },
     {
-        "id": "c16d3d05f128d577",
+        "id": "ff2f3cf5e628698b",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Visualització últims viatges",
         "func": "let lastsixMessages = flow.get(\"lastsixMessages\") || [];\nlet viatge = msg.payload.content.split(\"_\");\nlet numViatge = viatge[1] - 1;\n\nmsg.topic = `<b>Viatge ${viatge[1]}</b>\n${lastsixMessages[numViatge].content}`;\n\nmsg.payload.content = 'sis';\n\nflow.set(\"viatge\", viatge[1]);\n\nreturn msg;",
         "outputs": 1,
@@ -2672,14 +2672,14 @@
         "y": 1540,
         "wires": [
             [
-                "0a068af0dd8e121d"
+                "1654e644c8b93a25"
             ]
         ]
     },
     {
-        "id": "181fb740314c42e9",
+        "id": "855d2429b7494ab1",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "save_travel",
         "func": "let lastsixMessages = flow.get(\"lastsixMessages\") || [];\nlet viatge = flow.get(\"viatge\");\n\nmsg.topic = `${lastsixMessages[viatge-1].content}`;\n\nmsg.payload.content = `Travel_${viatge}`;\n\n\n\nreturn msg;",
         "outputs": 1,
@@ -2691,15 +2691,15 @@
         "y": 1580,
         "wires": [
             [
-                "d2a610da19c666d4",
-                "0f1ef0b608fda7aa"
+                "b20ef36712e1cbb7",
+                "a9b24c5279588e40"
             ]
         ]
     },
     {
-        "id": "0f1ef0b608fda7aa",
+        "id": "a9b24c5279588e40",
         "type": "delay",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "pauseType": "delay",
         "timeout": "0.1",
@@ -2717,14 +2717,14 @@
         "y": 1580,
         "wires": [
             [
-                "c16d3d05f128d577"
+                "ff2f3cf5e628698b"
             ]
         ]
     },
     {
-        "id": "64c90d263adeabf3",
+        "id": "5a1ab7076f7512cc",
         "type": "delay",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "pauseType": "delay",
         "timeout": "1",
@@ -2742,16 +2742,16 @@
         "y": 1860,
         "wires": [
             [
-                "43c8a20d965a3f4d"
+                "69f217d8c277d86f"
             ]
         ]
     },
     {
-        "id": "e6ca6aee13b314e1",
+        "id": "004c965adf14c244",
         "type": "function",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "Save orders 6",
-        "func": "let start = flow.get(\"dades_start\") || [];\nlet end = flow.get(\"dades_end\") || [];\nlet currentState = flow.get(\"currentState\");\nlet oldState = flow.get(\"oldState\");\nlet km = end[5] - start[5];\n\nif (oldState == \"driving\" && km >= 2) {\n    msg.payload = {}\n    msg.payload.content = 'save_lastsix';\n    return msg;\n}\n\nreturn null;",
+        "func": "let start = flow.get(\"dades_start\") || [];\nlet end = flow.get(\"dades_end\") || [];\nlet currentState = flow.get(\"currentState\");\nlet oldState = flow.get(\"oldState\");\nlet km = end[5] - start[5];\n\nif (oldState == \"driving\" && km >= flow.get(\"distLastSix\")) {\n    msg.payload = {}\n    msg.payload.content = 'save_lastsix';\n    return msg;\n}\n\nreturn null;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -2761,14 +2761,14 @@
         "y": 1960,
         "wires": [
             [
-                "b4081cc858c9c654"
+                "e50db9720f68069b"
             ]
         ]
     },
     {
-        "id": "c2062e98e9d5e741",
+        "id": "b07467a728c8f3d5",
         "type": "delay",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "name": "",
         "pauseType": "delay",
         "timeout": "0.1",
@@ -2786,14 +2786,14 @@
         "y": 1960,
         "wires": [
             [
-                "e6ca6aee13b314e1"
+                "004c965adf14c244"
             ]
         ]
     },
     {
-        "id": "13c2734f57e9b03e",
+        "id": "459d96c62d8d6e7e",
         "type": "telegram bot",
-        "z": "53c16985a9ab28c1",
+        "z": "1073cb1121328c0b",
         "botname": "pmb_tesla_bot",
         "usernames": "",
         "chatids": "",
