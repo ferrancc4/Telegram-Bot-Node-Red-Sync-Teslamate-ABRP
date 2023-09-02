@@ -224,6 +224,12 @@ Después de hacer todos los cambios, asegúrate de hacer clic en el botón "Depl
 
 ![deploy](screenshots/deploy.png)
 
+### Iniciar el bot
+
+Para iniciar el bot de Telegram utilizando el comando /Start, simplemente abre la aplicación de Telegram y busca el nombre de usuario del bot o su nombre completo. Luego, inicia una conversación con el bot y escribe /Start en el cuadro de chat y presiona enviar. Si todo está bien, el bot responderá automáticamente con tres opciones: resumen general, resumen carga y resumen último viaje.
+
+![start](screenshots/start.png)
+
 ## A tener en cuenta
 
 Quiero aclarar que los enlaces a los gráficos de Grafana que encontrarás en el bot no son los gráficos predeterminados de Teslamate. Estos enlaces están dirigidos a gráficos personalizados creados por [Carlos Cuezva - dashboards-Grafana-Teslamate](https://github.com/CarlosCuezva/dashboards-Grafana-Teslamate).
