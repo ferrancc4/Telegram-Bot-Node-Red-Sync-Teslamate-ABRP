@@ -234,6 +234,10 @@ Para iniciar el bot de Telegram utilizando el comando /Start, simplemente abre l
 
 Quiero aclarar que los enlaces a los gráficos de Grafana que encontrarás en el bot no son los gráficos predeterminados de Teslamate. Estos enlaces están dirigidos a gráficos personalizados creados por [Carlos Cuezva - dashboards-Grafana-Teslamate](https://github.com/CarlosCuezva/dashboards-Grafana-Teslamate).
 
+Para que se abran correctamente los enlaces hay que configurar la siguiente parte del nodo "variables" con la ip y el puerto donde está funcionando Grafana.
+
+![grafana](screenshots/grafana_conf.png)
+
 ## Créditos
 
 - Autor: Ferran Caubet
